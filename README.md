@@ -10,7 +10,7 @@ An empirical estimate of my Mandarin vocabulary size by stratified random sampli
 
 **Take the test yourself** (≈25 min, in Chinese, generates your own statistical report):
 
-> **https://yiyuan1840.github.io/ling-5832/**
+> **https://yiyuan1840.github.io/ling-5832/vocab-test/**
 
 ### How it works
 

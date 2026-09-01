@@ -5,8 +5,8 @@ from pathlib import Path
 
 HERE = Path(__file__).parent                     # assignments/A1/site
 REPO = HERE.parent.parent.parent                 # ling5832 repo root
-DOCS = REPO / "docs"
-DOCS.mkdir(exist_ok=True)
+DOCS = REPO / "docs" / "vocab-test"
+DOCS.mkdir(parents=True, exist_ok=True)
 
 data = json.load(open(HERE.parent / "experiment" / "sample.json", encoding="utf-8"))
 meta = dict(data["meta"], site="ling-5832 vocab test v1")
