@@ -1,0 +1,8 @@
+# Course textbook (freely available at web.stanford.edu/~jurafsky/slp3/; not redistributed here)
+ed3book_aug26.pdf
+
+# Derived full-dictionary JSON (10 MB; regenerate with assignments/A1/experiment/parse_dict.py)
+assignments/A1/experiment/population.json
+
+__pycache__/
+*.pyc

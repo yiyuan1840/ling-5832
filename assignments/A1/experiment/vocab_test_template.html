@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>词汇量抽样测试 · 《现代汉语词典》（第7版）</title>
+<style>
+  :root {
+    --bg: #faf9f6; --card: #ffffff; --ink: #1a1a1a; --muted: #8a877e;
+    --accent: #b0413e; --line: #e8e5de;
+    --k0: #f0eeea; --k1: #e8e0d0; --k2: #d9e4d9; --k3: #c9dcc9;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Source Han Serif SC", "Noto Serif CJK SC", "SimSun", serif;
+    display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+  }
+  header {
+    width: 100%; max-width: 720px; padding: 20px 24px 0;
+    font-family: "Microsoft YaHei", sans-serif; font-size: 13px; color: var(--muted);
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  #progressbar { width: 100%; max-width: 720px; height: 3px; background: var(--line); margin: 12px 0 0; }
+  #progressfill { height: 100%; background: var(--accent); width: 0%; transition: width .15s; }
+  main { width: 100%; max-width: 720px; padding: 24px; flex: 1; display: flex; flex-direction: column; }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+    padding: 40px 32px; box-shadow: 0 1px 3px rgba(0,0,0,.04);
+  }
+  #headword {
+    text-align: center; font-size: 56px; line-height: 1.3; margin: 24px 0 40px;
+    letter-spacing: .06em; min-height: 80px;
+  }
+  #headword.long { font-size: 36px; }
+  .btns { display: flex; flex-direction: column; gap: 10px; }
+  button.opt {
+    font-family: "Microsoft YaHei", sans-serif; font-size: 16px; text-align: left;
+    padding: 13px 18px; border: 1px solid var(--line); border-radius: 8px;
+    background: var(--card); cursor: pointer; transition: background .1s, border-color .1s;
+    display: flex; align-items: center; gap: 14px;
+  }
+  button.opt:hover { border-color: var(--accent); }
+  button.opt .key {
+    font-family: Consolas, monospace; font-size: 13px; color: var(--muted);
+    border: 1px solid var(--line); border-radius: 4px; padding: 2px 8px; flex: none;
+  }
+  button.opt .hint { color: var(--muted); font-size: 13px; margin-left: auto; text-align: right; }
+  #definition {
+    font-size: 17px; line-height: 1.9; background: #f6f4ef; border-radius: 8px;
+    padding: 18px 22px; margin: 0 0 24px; max-height: 40vh; overflow-y: auto;
+  }
+  #definition .dhead { font-weight: bold; }
+  .stagelabel {
+    font-family: "Microsoft YaHei", sans-serif; font-size: 14px; color: var(--muted);
+    text-align: center; margin-bottom: 18px;
+  }
+  footer {
+    width: 100%; max-width: 720px; padding: 0 24px 20px;
+    font-family: "Microsoft YaHei", sans-serif; font-size: 12.5px; color: var(--muted);
+    display: flex; justify-content: space-between;
+  }
+  footer a, footer span.link { color: var(--muted); cursor: pointer; text-decoration: underline; }
+  #summary table {
+    border-collapse: collapse; margin: 20px auto; font-family: "Microsoft YaHei", sans-serif; font-size: 14px;
+  }
+  #summary td, #summary th { border: 1px solid var(--line); padding: 7px 14px; text-align: center; }
+  .bigbtn {
+    font-family: "Microsoft YaHei", sans-serif; font-size: 16px; padding: 12px 28px;
+    border: none; border-radius: 8px; background: var(--accent); color: #fff; cursor: pointer;
+  }
+  .intro p { font-family: "Microsoft YaHei", sans-serif; font-size: 15px; line-height: 1.9; }
+  .intro b.term { color: var(--accent); }
+  #exportstatus { color: var(--accent); font-family: "Microsoft YaHei", sans-serif; font-size: 14px; margin-top: 12px; min-height: 20px; text-align: center;}
+</style>
+</head>
+<body>
+<header>
+  <span>《现代汉语词典》（第7版）词汇量抽样测试</span>
+  <span id="counter"></span>
+</header>
+<div id="progressbar"><div id="progressfill"></div></div>
+<main>
+  <div class="card" id="stage-intro">
+    <div class="intro">
+      <h2 style="margin-top:0">测试说明</h2>
+      <p>下面会依次出现 <b>360 个</b>从《现代汉语词典》第7版全部 70,414 个条目中<b>分层随机抽取</b>的字词。对每一个条目：</p>
+      <p><b class="term">第一步</b>：只看字形（不给拼音、不给释义），凭第一反应选择你对它的掌握程度（可按键盘 <b>1–4</b>）。</p>
+      <p><b class="term">第二步</b>：如果你选了"能说出大意"或"能正确使用"，屏幕会显示词典原文释义，请诚实判断你刚才心里想的意思是否正确（按 <b>1–3</b>）。</p>
+      <p>注意：有些字有多个读音、对应词典里多个条目（比如"啊"有5条）。抽到的是<b>某一个特定条目</b>——如果显示的释义和你想的读音/意思对不上，如实选"错了"即可，这正是实验设计的一部分。</p>
+      <p>进度会自动保存在浏览器里，中途关掉可以继续。做完后点"导出结果"，把下载的 JSON 文件放回 <code>A1/experiment/</code> 文件夹。</p>
+      <p style="text-align:center; margin-top: 28px;"><button class="bigbtn" onclick="start()">开始（约 20–30 分钟）</button></p>
+    </div>
+  </div>
+
+  <div class="card" id="stage-rate" hidden>
+    <div class="stagelabel">你对这个字/词的掌握程度是——</div>
+    <div id="headword"></div>
+    <div class="btns">
+      <button class="opt" onclick="rate(0)"><span class="key">1</span>不认识<span class="hint">从没见过，或完全不知道</span></button>
+      <button class="opt" onclick="rate(1)"><span class="key">2</span>眼熟<span class="hint">见过，但说不出意思</span></button>
+      <button class="opt" onclick="rate(2)"><span class="key">3</span>认识<span class="hint">能读出来并说出大致意思</span></button>
+      <button class="opt" onclick="rate(3)"><span class="key">4</span>掌握<span class="hint">能自己正确地用它说话/写作</span></button>
+    </div>
+  </div>
+
+  <div class="card" id="stage-verify" hidden>
+    <div class="stagelabel">词典释义如下 —— 你刚才心里的理解对吗？</div>
+    <div id="definition"></div>
+    <div class="btns">
+      <button class="opt" onclick="verify(2)"><span class="key">1</span>对<span class="hint">和我想的一致（至少一个义项）</span></button>
+      <button class="opt" onclick="verify(1)"><span class="key">2</span>部分对<span class="hint">大方向对，细节有出入</span></button>
+      <button class="opt" onclick="verify(0)"><span class="key">3</span>错了<span class="hint">和我想的不是一回事（或读音对应的是别的条目）</span></button>
+    </div>
+  </div>
+
+  <div class="card" id="stage-done" hidden>
+    <h2 style="margin-top:0; text-align:center">完成 🎉</h2>
+    <div id="summary"></div>
+    <p style="text-align:center"><button class="bigbtn" onclick="exportJSON()">导出结果 (vocab_results.json)</button></p>
+    <div id="exportstatus"></div>
+  </div>
+</main>
+<footer>
+  <span><span class="link" onclick="undo()">← 撤销上一步 (Backspace)</span></span>
+  <span><span class="link" onclick="if(confirm('确定清空全部进度重新开始？')){localStorage.removeItem(LSKEY);location.reload();}">清空进度</span></span>
+</footer>
+
+<script>
+const DATA = __DATA__;
+const META = __META__;
+const LSKEY = "vocabtest-xdhycd7-v1";
+
+let results = [];   // {id, head, len, rating, verify, ms1, ms2}
+let idx = 0;
+let phase = "intro"; // intro | rate | verify | done
+let t0 = 0;
+
+function saveLS() {
+  try { localStorage.setItem(LSKEY, JSON.stringify({results, idx, phase})); } catch(e) {}
+}
+function loadLS() {
+  try {
+    const s = localStorage.getItem(LSKEY);
+    if (!s) return false;
+    const o = JSON.parse(s);
+    if (!o || !Array.isArray(o.results)) return false;
+    results = o.results; idx = o.idx; phase = o.phase === "verify" ? "rate" : o.phase;
+    return results.length > 0 || idx > 0;
+  } catch(e) { return false; }
+}
+
+function show(id) {
+  for (const s of ["stage-intro","stage-rate","stage-verify","stage-done"])
+    document.getElementById(s).hidden = (s !== id);
+}
+function refresh() {
+  document.getElementById("counter").textContent =
+    phase === "done" ? "360 / 360" : `${idx + 1} / ${DATA.length}`;
+  document.getElementById("progressfill").style.width = (100 * idx / DATA.length) + "%";
+  if (phase === "intro") { show("stage-intro"); return; }
+  if (phase === "done")  { show("stage-done"); renderSummary(); return; }
+  const it = DATA[idx];
+  if (phase === "rate") {
+    const h = document.getElementById("headword");
+    h.textContent = it.head;
+    h.className = it.head.length > 5 ? "long" : "";
+    show("stage-rate");
+  } else {
+    const d = document.getElementById("definition");
+    d.innerHTML = "<span class='dhead'>【" + it.head + "】</span>" + escapeHtml(it.rest);
+    show("stage-verify");
+  }
+  t0 = performance.now();
+}
+function escapeHtml(s) {
+  return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+function start() {
+  if (results.length === 0 && idx === 0) { phase = "rate"; }
+  else { phase = "rate"; }
+  refresh();
+}
+
+function rate(r) {
+  if (phase !== "rate") return;
+  const it = DATA[idx];
+  const rec = {id: it.id, head: it.head, len: it.len, rating: r, verify: null,
+               ms1: Math.round(performance.now() - t0), ms2: null};
+  results.push(rec);
+  if (r >= 2) { phase = "verify"; }
+  else { advance(); return; }
+  saveLS(); refresh();
+}
+function verify(v) {
+  if (phase !== "verify") return;
+  const rec = results[results.length - 1];
+  rec.verify = v;
+  rec.ms2 = Math.round(performance.now() - t0);
+  advance();
+}
+function advance() {
+  idx += 1;
+  phase = (idx >= DATA.length) ? "done" : "rate";
+  saveLS(); refresh();
+}
+function undo() {
+  if (phase === "verify") { results.pop(); phase = "rate"; saveLS(); refresh(); return; }
+  if ((phase === "rate" || phase === "done") && results.length > 0) {
+    const last = results.pop();
+    idx = Math.max(0, idx - 1);
+    phase = "rate";
+    saveLS(); refresh();
+  }
+}
+
+function renderSummary() {
+  const labels = ["不认识","眼熟","认识","掌握"];
+  const counts = [0,0,0,0];
+  let overclaim = 0, claimed = 0;
+  for (const r of results) {
+    counts[r.rating] += 1;
+    if (r.rating >= 2) { claimed += 1; if (r.verify === 0) overclaim += 1; }
+  }
+  let html = "<table><tr><th>自评</th><th>条数</th></tr>";
+  for (let i = 0; i < 4; i++) html += `<tr><td>${labels[i]}</td><td>${counts[i]}</td></tr>`;
+  html += "</table>";
+  html += `<p style="font-family:'Microsoft YaHei',sans-serif;font-size:14px;text-align:center;color:var(--muted)">自称认识/掌握 ${claimed} 条，其中核对释义后判为“错了”的 ${overclaim} 条。<br>详细估计（分层加权、置信区间）由分析脚本完成。</p>`;
+  document.getElementById("summary").innerHTML = html;
+}
+
+function exportJSON() {
+  const payload = {meta: META, exportedAt: new Date().toISOString(), results};
+  const blob = new Blob([JSON.stringify(payload, null, 1)], {type: "application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "vocab_results.json";
+  document.body.appendChild(a); a.click(); a.remove();
+  const st = document.getElementById("exportstatus");
+  st.textContent = "已导出 vocab_results.json — 请把它移动到 A1/experiment/ 文件夹。";
+  navigator.clipboard && navigator.clipboard.writeText(JSON.stringify(payload)).then(
+    () => { st.textContent += "（同时已复制到剪贴板）"; }, () => {});
+}
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Backspace") { e.preventDefault(); undo(); return; }
+  const n = parseInt(e.key, 10);
+  if (phase === "rate" && n >= 1 && n <= 4) rate(n - 1);
+  else if (phase === "verify" && n >= 1 && n <= 3) verify([2,1,0][n - 1]);
+});
+
+if (loadLS()) {
+  if (phase === "done" || idx >= DATA.length) { phase = "done"; idx = DATA.length; }
+  refresh();
+  if (phase !== "done") {
+    document.querySelector("#stage-intro .intro p:last-child button").textContent =
+      `继续（已完成 ${idx} / ${DATA.length}）`;
+    show("stage-intro"); phase = "intro"; refresh(); phase = "intro";
+    document.getElementById("stage-intro").hidden = false;
+    document.getElementById("stage-rate").hidden = true;
+  }
+} else {
+  refresh();
+}
+</script>
+</body>
+</html>
