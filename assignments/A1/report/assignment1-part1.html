@@ -4,17 +4,17 @@
 <meta charset="utf-8">
 <title>Assignment 1, Part 1</title>
 <style>
-  @page { size: letter; margin: 0.65in; }
+  @page { size: letter; margin: 0.6in; }
   html, body { margin: 0; padding: 0; }
   body {
     font-family: "Times New Roman", "Source Han Serif SC", "SimSun", serif;
-    font-size: 10pt; line-height: 1.26; color: #000;
+    font-size: 10pt; line-height: 1.23; color: #000;
   }
-  .titleblock { text-align: center; margin-bottom: 7pt; }
+  .titleblock { text-align: center; margin-bottom: 6pt; }
   .titleblock h1 { font-size: 14pt; margin: 0 0 2pt; }
   .titleblock .meta { font-size: 9.5pt; }
-  h2 { font-size: 11pt; margin: 6.5pt 0 2pt; }
-  p { margin: 0 0 4.5pt; text-align: justify; }
+  h2 { font-size: 11pt; margin: 6pt 0 2pt; }
+  p { margin: 0 0 4pt; text-align: justify; }
   table { border-collapse: collapse; margin: 4pt auto 3pt; font-size: 8.5pt; page-break-inside: avoid; }
   th, td { border: 0.75pt solid #444; padding: 1.5pt 6pt; text-align: center; }
   th { font-weight: bold; }
@@ -30,61 +30,61 @@
 
 <div class="titleblock">
   <h1>How Many Words Do I Know in My Native Mandarin?</h1>
-  <div class="meta">LING 5832 &mdash; Assignment 1, Part 1 &nbsp;&bull;&nbsp; Yiyuan Jia &nbsp;&bull;&nbsp; August 31, 2026</div>
+  <div class="meta">LING 5832, Assignment 1, Part 1 &nbsp;&bull;&nbsp; Yiyuan Jia &nbsp;&bull;&nbsp; August 31, 2026</div>
 </div>
 
 <h2>1&nbsp;&nbsp;The short answer</h2>
-<p>My native language is Mandarin Chinese. I know approximately <b>60,800 of the 70,414 headword entries of 《现代汉语词典》 (<i>Contemporary Chinese Dictionary</i>, 7th ed.; XHC7) &mdash; about 86% of the standard reference dictionary of Modern Standard Chinese &mdash; with a 95% confidence interval of 58,400&ndash;63,200</b>, estimated by stratified random sampling of the dictionary&rsquo;s full text and a two-stage self-test in which every claim of knowledge was checked against the revealed definition. That number hides three definitional choices &mdash; what a <i>word</i> is (unusually fraught in Mandarin), what <i>knowing</i> means, and what population &ldquo;how many&rdquo; ranges over &mdash; under which my defensible answers run from about 6,700 to 65,600. This report makes the choices explicit.</p>
+<p>My native language is Mandarin Chinese. I know approximately <b>57,800 of the 70,414 headword entries of 《现代汉语词典》 (<i>Contemporary Chinese Dictionary</i>, 7th ed.; XHC7), about 82% of the standard reference dictionary of Modern Standard Chinese, with a 95% confidence interval of 55,000 to 60,500</b>. The estimate comes from stratified random sampling of the dictionary and a self test in two stages that checked every claim against the revealed definition. That number hides three definitional choices: what a <i>word</i> is (unusually fraught in Mandarin), what <i>knowing</i> means, and what population &ldquo;how many&rdquo; ranges over. Under different choices my defensible answers run from about 5,500 to 64,700. This report makes the choices explicit.</p>
 
 <h2>2&nbsp;&nbsp;What counts as a &ldquo;word&rdquo;? Mandarin morphology and the unit problem</h2>
-<p>Mandarin makes &ldquo;word&rdquo; hard to pin down. The orthography marks no word boundaries (hence the word-segmentation step in Chinese NLP), and the salient folk unit is the 字 <i>zì</i> (character), roughly a morpheme-syllable; the linguistic word 词 <i>cí</i> spans one to four characters, and native intuitions about its boundaries are famously unstable (Packard 2000). Morphologically, Mandarin is strongly isolating &mdash; no agreement, case, or tense; only aspect clitics (了, 着, 过) and the restricted plural 们 &mdash; so the lemma-versus-wordform choice that can double an English count, and worse for Finnish, barely arises. The action is instead in word <i>formation</i>: the lexicon is built overwhelmingly by compounding (词典 &lsquo;word-dictionary&rsquo; = dictionary), plus derivation and reduplication, so &ldquo;how many words do you know&rdquo; is partly &ldquo;how productive is your compounding&rdquo; &mdash; a question with no finite answer.</p>
-<p>I operationalized <i>word</i> as <b>headword entry in XHC7</b> (written form + pronunciation + sense set; 70,414 entries). This is countable and reproducible but inherits lexicographic compromises: 16% of entries are single-character 字头, many of them bound morphemes rather than free words (the ones I missed were mostly archaic literary characters like 坰 &lsquo;open country&rsquo;); 6,497 four-character entries are mostly 成语, structurally phrases; separable 离合词 like 睡觉 blur the word&ndash;phrase line; 2,334 forms map to multiple entries (啊 has five); and transparent compounds are simply absent &mdash; XHC7 lists 鸭蛋 &lsquo;duck egg&rsquo; but not 鸡蛋 &lsquo;hen&rsquo;s egg,&rsquo; 牙刷 &lsquo;toothbrush&rsquo; but not 电动牙刷 &lsquo;electric toothbrush&rsquo; &mdash; though I know each unlisted member exactly as well as the listed one.</p>
+<p>Mandarin makes &ldquo;word&rdquo; hard to pin down. The orthography marks no word boundaries (hence the word segmentation step in Chinese NLP), and the salient folk unit is the 字 <i>zì</i> (character), roughly one morpheme per syllable; the linguistic word 词 <i>cí</i> spans one to four characters, and native intuitions about its boundaries are famously unstable (Packard 2000). Morphologically, Mandarin is strongly isolating: no agreement, case, or tense; only aspect clitics (了, 着, 过) and the restricted plural 们. The choice between lemma and wordform, which can double an English count, therefore barely arises. The action is instead in word <i>formation</i>: the lexicon is built overwhelmingly by compounding (词典, literally word plus dictionary, means dictionary), with some derivation and reduplication, so &ldquo;how many words do you know&rdquo; is partly &ldquo;how productive is your compounding,&rdquo; a question with no finite answer.</p>
+<p>I operationalized <i>word</i> as <b>headword entry in XHC7</b> (written form, pronunciation, and sense set; 70,414 entries). This is countable and reproducible but inherits lexicographic compromises: 16% of entries are single character 字头, many of them bound morphemes rather than free words (the ones I missed were mostly archaic literary characters like 谫 &lsquo;shallow&rsquo;); 6,497 four character entries are mostly 成语, structurally phrases; separable verb object items like 睡觉 blur the line between word and phrase; 2,334 forms map to multiple entries (啊 has five); and transparent compounds are simply absent. XHC7 lists 鸭蛋 &lsquo;duck egg&rsquo; but not 鸡蛋 &lsquo;hen&rsquo;s egg,&rsquo; 牙刷 &lsquo;toothbrush&rsquo; but not 电动牙刷 &lsquo;electric toothbrush,&rsquo; though I know each unlisted member exactly as well as the listed one.</p>
 
 <h2>3&nbsp;&nbsp;What counts as &ldquo;knowing&rdquo; a word?</h2>
-<p>&ldquo;Know&rdquo; is a two-stage judgment here, with the bare written form as stimulus (no pinyin, no gloss). Stage 1, self-rating: 不认识 / 眼熟 (form familiar, no meaning) / 认识 (can read it and give the approximate meaning) / 掌握 (could use it correctly myself). Stage 2: every claim of 认识 or 掌握 was checked against the revealed dictionary definition &mdash; 对 / 部分对 / 错了. Verification guards against self-report inflation; it caught me 25 times in 336 claims (7.4%) &mdash; including, embarrassingly for this course, 黏着语 &lsquo;agglutinative language&rsquo; &mdash; with partial errors concentrated in semi-transparent 成语 (集腋成裘), and it also catches claiming a homographic form while thinking of a different entry. I score four operationalizations: <b>receptive-strict</b> (认识+, verified 对; the headline), <b>receptive-lenient</b> (对/部分对), <b>productive</b> (掌握 and 对), and <b>self-report</b> (认识+, unverified). Response times corroborate the scale: median 674&nbsp;ms for 掌握 judgments versus 2.3&ndash;3.6&nbsp;s for all other categories &mdash; the signature of automatic lexical access.</p>
+<p>&ldquo;Know&rdquo; is a judgment in two stages here, with the bare written form as stimulus (no pinyin, no gloss). Stage 1, a rating of myself: 不认识 / 眼熟 (form familiar, no meaning) / 认识 (can read it and give the approximate meaning) / 掌握 (could use it correctly myself). Stage 2: every claim of 认识 or 掌握 was checked against the revealed dictionary definition as 对 / 部分对 / 错了. Verification guards against the inflation of self report, and it caught me 34 times in 331 claims (10.3%): 18 outright wrong, among them the semi transparent idiom 狮子搏兔 and the old transliteration 哀的美敦书 &lsquo;ultimatum,&rsquo; plus 16 partially right (韵白, 鞭辟近里). It also catches claims made while thinking of a different homographic entry. I score four operationalizations: <b>strict receptive</b> (认识 or above, verified 对; the headline), <b>lenient receptive</b> (对 or 部分对), <b>productive</b> (掌握 and 对), and <b>self report</b> (认识 or above, unverified). Response times corroborate the scale: median 653&nbsp;ms for 掌握 judgments versus 1.8 to 2.8&nbsp;seconds for all other categories, the signature of automatic lexical access.</p>
 
 <h2>4&nbsp;&nbsp;&ldquo;How many&rdquo;: estimation, not enumeration</h2>
-<p>No one can enumerate their lexicon, so &ldquo;how many&rdquo; here means a point estimate, with quantified sampling uncertainty, of a defined population quantity: the number of XHC7 entries I know (excluding front matter and the Western-alphabet appendix). I stratified the entries by headword length and drew a seeded random sample of 360 &mdash; 60/180/45/55/20 from the 1/2/3/4/5+-character strata (N<sub>h</sub> = 11,424 / 45,086 / 6,690 / 6,497 / 717); long strata are deliberately oversampled and the weighting corrects for it. The estimator is the stratified total &Sigma;&nbsp;N<sub>h</sub>&nbsp;p&#770;<sub>h</sub> with finite-population-corrected standard errors, plus a conservative interval from per-stratum Wilson bounds since several p&#770; sit near 1.</p>
+<p>No one can enumerate their lexicon, so &ldquo;how many&rdquo; here means a point estimate, with quantified sampling uncertainty, of a defined population quantity: the number of XHC7 entries I know (excluding front matter and the appendix of Western alphabet items). I stratified the entries by headword length and drew seeded random samples of 360 items each: 60, 180, 45, 55, and 20 from the strata of one, two, three, four, and five or more characters (N<sub>h</sub> = 11,424 / 45,086 / 6,690 / 6,497 / 717); long strata are deliberately oversampled and the weighting corrects for it. I took the test twice on disjoint samples, form A then form C of the public instrument of section 8; this report uses the newer form C run, with form A as a stability check. The estimator is the stratified total &Sigma;&nbsp;N<sub>h</sub>&nbsp;p&#770;<sub>h</sub> with standard errors under finite population correction, plus a conservative interval from Wilson bounds per stratum since several p&#770; sit near 1.</p>
 
 <h2>5&nbsp;&nbsp;Results</h2>
 <table>
-<caption><b>Table 1.</b> Per-stratum results, receptive-strict definition.</caption>
+<caption><b>Table 1.</b> Results by stratum, strict receptive definition (form C).</caption>
 <tr><th>Stratum</th><th>N<sub>h</sub></th><th>n<sub>h</sub></th><th>known</th><th>p&#770;<sub>h</sub></th><th>est. known</th></tr>
-<tr><td>1 character (字头)</td><td>11,424</td><td>60</td><td>35</td><td>.583</td><td>6,664</td></tr>
-<tr><td>2 characters</td><td>45,086</td><td>180</td><td>166</td><td>.922</td><td>41,579</td></tr>
-<tr><td>3 characters</td><td>6,690</td><td>45</td><td>41</td><td>.911</td><td>6,095</td></tr>
-<tr><td>4 characters (mostly 成语)</td><td>6,497</td><td>55</td><td>49</td><td>.891</td><td>5,788</td></tr>
-<tr><td>5+ characters (熟语&sol;谚语)</td><td>717</td><td>20</td><td>20</td><td>1.000</td><td>717</td></tr>
-<tr><td><b>Total</b></td><td><b>70,414</b></td><td><b>360</b></td><td><b>311</b></td><td>&mdash;</td><td><b>60,844</b></td></tr>
+<tr><td>1 character (字头)</td><td>11,424</td><td>60</td><td>29</td><td>.483</td><td>5,522</td></tr>
+<tr><td>2 characters</td><td>45,086</td><td>180</td><td>157</td><td>.872</td><td>39,325</td></tr>
+<tr><td>3 characters</td><td>6,690</td><td>45</td><td>42</td><td>.933</td><td>6,244</td></tr>
+<tr><td>4 characters (mostly 成语)</td><td>6,497</td><td>55</td><td>51</td><td>.927</td><td>6,024</td></tr>
+<tr><td>5+ characters (熟语&sol;谚语)</td><td>717</td><td>20</td><td>18</td><td>.900</td><td>645</td></tr>
+<tr><td><b>Total</b></td><td><b>70,414</b></td><td><b>360</b></td><td><b>297</b></td><td></td><td><b>57,760</b></td></tr>
 </table>
 <table>
-<caption><b>Table 2.</b> Estimated entries known under four operationalizations of &ldquo;know.&rdquo;</caption>
-<tr><th>Definition</th><th>Estimate</th><th>95% CI (normal)</th><th>Wilson-summed</th></tr>
-<tr><td>Self-report only</td><td>65,604</td><td>[63,924, 67,284]</td><td>[61,587, 67,426]</td></tr>
-<tr><td>Receptive, lenient</td><td>63,140</td><td>[61,032, 65,248]</td><td>[58,316, 65,991]</td></tr>
-<tr><td><b>Receptive, strict</b></td><td><b>60,844</b></td><td><b>[58,441, 63,247]</b></td><td>[55,599, 64,299]</td></tr>
-<tr><td>Productive</td><td>59,581</td><td>[57,085, 62,078]</td><td>[54,270, 63,215]</td></tr>
+<caption><b>Table 2.</b> Estimated entries known under four operationalizations of &ldquo;know&rdquo; (form C).</caption>
+<tr><th>Definition</th><th>Estimate</th><th>95% CI (normal)</th><th>summed Wilson bounds</th></tr>
+<tr><td>Self report only</td><td>64,676</td><td>[62,825, 66,528]</td><td>[60,337, 66,895]</td></tr>
+<tr><td>Lenient receptive</td><td>61,354</td><td>[59,088, 63,620]</td><td>[56,399, 64,497]</td></tr>
+<tr><td><b>Strict receptive</b></td><td><b>57,760</b></td><td><b>[55,039, 60,482]</b></td><td>[52,275, 61,656]</td></tr>
+<tr><td>Productive</td><td>56,419</td><td>[53,561, 59,277]</td><td>[50,779, 60,559]</td></tr>
 </table>
-<p>Knowledge is near ceiling for multi-character words (89&ndash;100% by stratum) but far lower (58%) for single-character 字头, exactly where the dictionary stocks archaic, literary, and dialectal bound morphemes; multi-character entries alone give 54,180 of 58,990 (92%). Verification removed &asymp;4,800 entries from the self-report estimate, and the scoring of 部分对 moves the answer another &plusmn;2,300.</p>
+<p>Knowledge is high for multi character words (87% to 93% by stratum) but far lower (48%) for single character 字头, exactly where the dictionary stocks archaic, literary, and dialectal bound morphemes; multi character entries alone give 52,238 of 58,990 (89%). Verification removed about 6,900 entries from the self report estimate, and the scoring of 部分对 moves the answer by another 3,600. The stability check: form A, on disjoint items, gave a strict estimate of 60,844 with CI [58,441, 63,247]; the runs differ by about 3,100, or 1.7 standard errors of the difference, within what sampling error alone would produce, though my verification also grew stricter the second time (10.3% of claims caught versus 7.4%).</p>
 
 <h2>6&nbsp;&nbsp;Where the method and the definitions come apart</h2>
 <ol class="tight">
-<li><b>The dictionary is not my lexicon, in both directions.</b> XHC7 (2016) omits my technical vocabulary, neologisms, and the transparent compounds I produce freely (undercount); it counts bound 字头 and splits homographs (overcount of &ldquo;words&rdquo;). Read the estimate as coverage of a curated reference lexicon &mdash; which also makes cross-language comparison treacherous: 17,000 English word <i>families</i> (Goulden, Nation &amp; Read 1990) is a different unit over a different universe.</li>
-<li><b>&ldquo;Productive&rdquo; was never tested by production.</b> 掌握 is still self-assessment; an actual production task would likely lower the 59,581.</li>
-<li><b>Verification is imperfect.</b> 对 requires only one sense of a polysemous entry (entry-level, not sense-level, knowledge), and &asymp;6% of entries in the community transcription lack definitions &mdash; 25 of my 336 claims hit blanks, degenerating to self-report there.</li>
-<li><b>One subject, one session.</b> The CIs quantify sampling error only, not the stability of my own judgments.</li>
+<li><b>The dictionary is not my lexicon, in both directions.</b> XHC7 (2016) omits my technical vocabulary, neologisms, and the transparent compounds I produce freely (an undercount); it counts bound 字头 and splits homographs (an overcount of &ldquo;words&rdquo;). Read the estimate as coverage of a curated reference lexicon, which also makes comparison across languages treacherous: 17,000 English word <i>families</i> (Goulden, Nation &amp; Read 1990) is a different unit over a different universe.</li>
+<li><b>&ldquo;Productive&rdquo; was never tested by production.</b> 掌握 is still self assessment; an actual production task would likely lower the 56,419.</li>
+<li><b>Verification is imperfect.</b> 对 requires only one sense of a polysemous entry (knowledge at the level of entries, not senses), and about 6% of entries in the community transcription lack definitions; 18 of my 331 claims hit blanks, and verification degenerated to self report there.</li>
+<li><b>One subject, two sessions.</b> The CIs quantify sampling error only, not the stability of my own judgments; the two administrations bound that instability at roughly the size of the sampling error itself.</li>
 </ol>
 
 <h2>7&nbsp;&nbsp;Conclusion</h2>
-<p>About <b>61,000 dictionary entries</b> &mdash; six of every seven in the standard dictionary &mdash; under a receptive, definition-checked criterion. The more instructive answer is the decomposition Mandarin morphology forces: &asymp;6,700 of 11,424 single-character morpheme entries, essentially all mid-frequency compound vocabulary, nine in ten 成语, and beyond that an open set of transparent compounds no dictionary will list, because the morphology builds them on demand. &ldquo;How many words do you know&rdquo; has a numeric answer only after you decide what a word is; in Mandarin, that decision is most of the question.</p>
+<p>About <b>58,000 dictionary entries</b>, some 82% of the standard dictionary, under a strict receptive criterion with definition checking. The more instructive answer is the decomposition Mandarin morphology forces: roughly 5,500 of 11,424 single character morpheme entries, most of the mid frequency compound vocabulary, more than nine in ten 成语, and beyond that an open set of transparent compounds no dictionary will list, because the morphology builds them on demand. &ldquo;How many words do you know&rdquo; has a numeric answer only after you decide what a word is; in Mandarin, that decision is most of the question.</p>
 
 <h2>8&nbsp;&nbsp;Postscript: a public replication site</h2>
-<p>The instrument is deployed as a public web app at <b>yiyuan1840.github.io/ling-5832/vocab-test/</b>: five fixed 360-item forms (A&ndash;E; form A is the one reported here) drawn disjointly under the same stratified design with fixed seeds, with testers randomly assigned to a form. On completion the page computes the full stratified analysis client-side (the JavaScript estimator reproduces the Python reference values on my data exactly) and renders a printable per-tester report; data stay in the tester&rsquo;s browser unless exported as JSON, which the analysis script accepts directly. Jointly the forms probe 1,800 distinct entries; within a form, testers are directly comparable, and across forms sampling error averages out.</p>
-<p class="small"><i>Reproducibility:</i> parsing, seeded sampling, test app, site source, analysis scripts, and my 360 raw judgments: github.com/yiyuan1840/ling-5832; dictionary text: the community transcription github.com/CNMan/XDHYCD7th (as a submodule).</p>
+<p>The instrument is deployed as a public web app at <b>yiyuan1840.github.io/ling-5832/vocab-test/</b>: five fixed forms of 360 items (A through E), drawn disjointly under the same stratified design with fixed seeds, with each tester randomly assigned to one form. On completion the page computes the full stratified analysis in the browser (the JavaScript estimator reproduces the Python reference values exactly) and renders a printable personal report; data stay in the tester&rsquo;s browser unless exported as JSON, which the analysis script accepts directly. Jointly the forms probe 1,800 distinct entries; within a form testers are directly comparable, and across forms sampling error averages out.</p>
+<p class="small"><i>Reproducibility:</i> parsing, seeded sampling, test app, site source, analysis scripts, and my raw judgments: github.com/yiyuan1840/ling-5832; dictionary text: the community transcription github.com/CNMan/XDHYCD7th (as a submodule).</p>
 
 <h2>References</h2>
 <div class="refs">
-<p>Goulden, R., Nation, P., &amp; Read, J. (1990). How large can a receptive vocabulary be? <i>Applied Linguistics</i>, 11(4), 341&ndash;363.</p>
+<p>Goulden, R., Nation, P., &amp; Read, J. (1990). How large can a receptive vocabulary be? <i>Applied Linguistics</i>, 11(4), 341 to 363.</p>
 <p>Packard, J. L. (2000). <i>The Morphology of Chinese: A Linguistic and Cognitive Approach.</i> Cambridge University Press.</p>
 <p>中国社会科学院语言研究所词典编辑室 (2016). 《现代汉语词典》（第7版）. 北京：商务印书馆.</p>
 </div>
