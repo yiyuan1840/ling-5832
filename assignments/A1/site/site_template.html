@@ -108,7 +108,7 @@
   <div class="card" id="stage-intro">
     <div class="intro">
       <h2 style="margin-top:0">你认识多少个词？</h2>
-      <p>这是一个语言学小实验：用<b>分层随机抽样</b>估计你认识《现代汉语词典》（第7版）全部 <b>70,414 个条目</b>中的多少个。测试共 <b>360 个</b>字词，约需 20&ndash;30 分钟。做完后可以一键生成属于你的统计报告（含置信区间），并保存为 PDF。</p>
+      <p>这是一个语言学小实验：用<b>分层随机抽样</b>估计你认识《现代汉语词典》（第7版）全部 <b>70,414 个条目</b>中的多少个。测试共 <b>360 个</b>字词，约需 20&ndash;30 分钟。题目共 5 套固定版本，系统随机分配一套。做完后可以一键生成属于你的统计报告（含置信区间），并保存为 PDF。</p>
       <p><b class="term">第一步</b>：只看字形（不给拼音和释义），凭第一反应选择掌握程度（键盘 <b>1&ndash;4</b>）。<br>
       <b class="term">第二步</b>：若自评"认识"或"掌握"，会显示词典原文释义，请诚实核对你刚才的理解是否正确（键盘 <b>1&ndash;3</b>）。有的字有多个读音、对应多个条目，抽到的是某一个特定条目——释义对不上就选"错了"，这正是设计的一部分。</p>
       <p>所有数据只保存在你自己的浏览器里；进度自动保存，中途关掉可以继续。测试结束后如愿意，可将导出的数据文件发给组织者用于汇总分析。</p>
@@ -163,10 +163,12 @@
 
 <script src="stats.js"></script>
 <script>
-const DATA = __DATA__;
+const FORMS = __DATA__;
 const META = __META__;
-const LSKEY = "vocabtest-xdhycd7-site-v1";
+const LSKEY = "vocabtest-xdhycd7-site-v2";
 
+let form = null;   // "A".."E"
+let DATA = null;
 let results = [];
 let idx = 0;
 let phase = "intro"; // intro | rate | verify | done | report
@@ -175,7 +177,7 @@ let t0 = 0;
 function saveLS() {
   try {
     localStorage.setItem(LSKEY, JSON.stringify({
-      results, idx, phase: (phase === "verify" ? "rate" : phase),
+      form, results, idx, phase: (phase === "verify" ? "rate" : phase),
       name: document.getElementById("testername").value
     }));
   } catch (e) {}
@@ -185,8 +187,8 @@ function loadLS() {
     const s = localStorage.getItem(LSKEY);
     if (!s) return false;
     const o = JSON.parse(s);
-    if (!o || !Array.isArray(o.results)) return false;
-    results = o.results; idx = o.idx;
+    if (!o || !Array.isArray(o.results) || !FORMS[o.form]) return false;
+    form = o.form; results = o.results; idx = o.idx;
     if (o.name) document.getElementById("testername").value = o.name;
     return results.length > 0;
   } catch (e) { return false; }
@@ -198,8 +200,8 @@ function show(id) {
 }
 function refresh() {
   document.getElementById("counter").textContent =
-    (phase === "done" || phase === "report") ? DATA.length + " / " + DATA.length
-      : (phase === "intro" ? "" : (idx + 1) + " / " + DATA.length);
+    (phase === "done" || phase === "report") ? "版本" + form + " ・ " + DATA.length + " / " + DATA.length
+      : (phase === "intro" ? "" : "版本" + form + " ・ " + (idx + 1) + " / " + DATA.length);
   document.getElementById("progressfill").style.width = (100 * idx / DATA.length) + "%";
   if (phase === "intro") { show("stage-intro"); return; }
   if (phase === "done") { show("stage-done"); return; }
@@ -271,7 +273,7 @@ function showReport() {
 
   let h = "";
   h += "<h1>《现代汉语词典》（第7版）词汇量测试报告</h1>";
-  h += "<div class='meta'>" + escapeHtml(name) + " ・ " + date + " ・ 样本 360 / 总体 " + fmt(a.population) + " 条</div>";
+  h += "<div class='meta'>" + escapeHtml(name) + " ・ " + date + " ・ 题目版本 " + form + " ・ 样本 360 / 总体 " + fmt(a.population) + " 条</div>";
 
   h += "<h2>一、结论</h2>";
   h += "<p>在<b>严格理解</b>标准下（自评“认识”及以上、且与词典释义核对为“对”），估计你认识《现代汉语词典》第7版 " + fmt(a.population) +
@@ -317,7 +319,7 @@ function showReport() {
        "需要注意：词典条目不等于心理词库——它既收录了很多不能独立成词的语素（单字条目），又不收透明复合词（如收“鸭蛋”不收“鸡蛋”）；" +
        "“掌握”仍是自评而非真实产出测试；置信区间只刻画抽样误差，不含判断本身的不稳定性；另有约 6% 条目的释义在社区转录中暂缺，核对环节对这些条目退化为自评。</p>";
 
-  h += "<div class='foot'>实验设计：Yiyuan Jia，LING 5832（自然语言处理）作业一 ・ 词典文本：github.com/CNMan/XDHYCD7th（社区转录，仅用于教学研究）・ 固定随机种子 5832，所有测试者使用同一样本，结果可相互比较。</div>";
+  h += "<div class='foot'>实验设计：Yiyuan Jia，LING 5832（自然语言处理）作业一 ・ 词典文本：github.com/CNMan/XDHYCD7th（社区转录，仅用于教学研究）・ 题目共 5 套固定版本（A&ndash;E，互不重叠，固定随机种子），测试者随机分配一套；本报告基于版本 " + form + "，同版本结果可直接比较。</div>";
 
   document.getElementById("report").innerHTML = h;
   phase = "report"; saveLS(); refresh();
@@ -325,7 +327,7 @@ function showReport() {
 }
 
 function exportJSON() {
-  const payload = { meta: META, tester: document.getElementById("testername").value.trim() || null,
+  const payload = { meta: META, form, tester: document.getElementById("testername").value.trim() || null,
                     exportedAt: new Date().toISOString(), results };
   const blob = new Blob([JSON.stringify(payload, null, 1)], { type: "application/json" });
   const a = document.createElement("a");
@@ -344,11 +346,16 @@ document.addEventListener("keydown", (e) => {
 });
 
 if (loadLS()) {
+  DATA = FORMS[form];
   if (idx >= DATA.length) { phase = "done"; }
   else {
     document.getElementById("startbtn").textContent = "继续（已完成 " + idx + " / " + DATA.length + "）";
     phase = "intro";
   }
+} else {
+  const param = new URLSearchParams(location.search).get("form");
+  form = FORMS[param] ? param : "ABCDE"[Math.floor(Math.random() * 5)];
+  DATA = FORMS[form];
 }
 refresh();
 </script>
