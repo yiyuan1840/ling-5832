@@ -6,3 +6,17 @@ assignments/A1/experiment/population.json
 
 __pycache__/
 *.pyc
+
+# Course materials, not redistributed here
+# Bender, Linguistic Fundamentals for NLP (98 MB; via CU library / Morgan & Claypool)
+BenderLingNLP.pdf
+# Lecture slides (61 MB; posted on the course Canvas site)
+lectures/
+
+# A2 derived data, regenerate with: python assignments/A2/src/prepare_data.py
+assignments/A2/data/clean/
+# A2 trained artifacts, regenerate with: python assignments/A2/src/train_final.py
+assignments/A2/models/
+
+# Generated when building the A2 report; rebuild with: uv run assignments/A2/render_report.py
+assignments/A2/report/assignment2.built.html
