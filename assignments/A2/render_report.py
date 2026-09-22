@@ -9,6 +9,7 @@
 import re
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 import markdown
@@ -60,8 +61,14 @@ PDF.unlink(missing_ok=True)
 
 try:
     built.write_text(page, encoding="utf-8")
-    subprocess.run([str(EDGE), "--headless", "--disable-gpu", "--no-pdf-header-footer",
-                    f"--print-to-pdf={PDF}", str(built)], capture_output=True, check=True)
+    # --user-data-dir gives this run its own throwaway profile. Without it, headless Edge
+    # tries to hand the job to an already running Edge and hangs indefinitely if you happen
+    # to have the browser open.
+    with tempfile.TemporaryDirectory() as profile:
+        subprocess.run([str(EDGE), "--headless", "--disable-gpu", "--no-pdf-header-footer",
+                        f"--user-data-dir={profile}",
+                        f"--print-to-pdf={PDF}", str(built)],
+                       capture_output=True, check=True, timeout=120)
 finally:
     built.unlink(missing_ok=True)
 print(f"wrote {PDF.name} ({PDF.stat().st_size // 1024} KB)")
@@ -82,6 +89,7 @@ full = "".join(p.extract_text() for p in reader.pages)
 full = re.sub(r"\S*(github\.com|github\.io|https?://)\S*", "", full)
 scrubbed = re.sub(r"(\w+\.py|models\.BPE|trainers\.BpeTrainer|train_tokenizer|neg_log_prob"
                   r"|cross_entropy|initial_alphabet|ByteLevel\.alphabet|split_sentences"
-                  r"|uv run|src/|n.gram|pre.tokeniz\w*|add.k|add.1|out of vocabulary)",
+                  r"|uv run|src/|n.gram|pre.tokeniz\w*|add.k|add.1|out of vocabulary"
+                  r"|a2.submitted)",
                   "", full, flags=re.I)
 print(f"dashes left in prose: {len(re.findall(r'[-\u2010-\u2015]', scrubbed))}")
