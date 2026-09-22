@@ -20,6 +20,11 @@ All code and the full report are in a public GitHub repository:
 | The experiments behind every table in the report | [src/experiments.py](https://github.com/yiyuan1840/ling-5832/blob/main/assignments/A2/src/experiments.py) |
 | Author ID labels for the test set | to follow once the test set is released |
 
+The links above point at the current state of the repository, so any later corrections are
+visible through the same links. The state as submitted is tagged
+[`a2-submitted`](https://github.com/yiyuan1840/ling-5832/tree/a2-submitted/assignments/A2) if a
+fixed snapshot is preferred.
+
 
 ## Running it
 
