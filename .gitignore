@@ -17,6 +17,3 @@ lectures/
 assignments/A2/data/clean/
 # A2 trained artifacts, regenerate with: python assignments/A2/src/train_final.py
 assignments/A2/models/
-
-# Generated when building the A2 report; rebuild with: uv run assignments/A2/render_report.py
-assignments/A2/report/assignment2.built.html

@@ -8,13 +8,13 @@
 import re
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 import markdown
 
 HERE = Path(__file__).parent
 SOURCE = HERE / "report" / "assignment2.md"
-BUILT_HTML = HERE / "report" / "assignment2.built.html"
 PDF = HERE / "assignment2.pdf"
 EDGE = Path(r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe")
 
@@ -37,18 +37,22 @@ code { font-family: "Consolas", monospace; font-size: 9pt; }
 em:last-child { font-size: 9pt; }
 """
 
-text = SOURCE.read_text(encoding="utf-8")
-body = markdown.markdown(text, extensions=["tables", "sane_lists"])
-BUILT_HTML.write_text(
-    f'<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
-    f"<title>Assignment 2</title>\n<style>{CSS}</style>\n</head>\n<body>\n{body}\n</body>\n</html>\n",
-    encoding="utf-8")
-
 if not EDGE.exists():
     sys.exit(f"Edge not found at {EDGE}")
 
-subprocess.run([str(EDGE), "--headless", "--disable-gpu", "--no-pdf-header-footer",
-                f"--print-to-pdf={PDF}", str(BUILT_HTML)], capture_output=True, check=True)
+text = SOURCE.read_text(encoding="utf-8")
+body = markdown.markdown(text, extensions=["tables", "sane_lists"])
+page = (f'<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
+        f"<title>Assignment 2</title>\n<style>{CSS}</style>\n</head>\n"
+        f"<body>\n{body}\n</body>\n</html>\n")
+
+# Edge needs a file to read, so the HTML goes to a temporary one that is deleted afterwards
+# rather than left sitting in report/ looking like something you are meant to edit.
+with tempfile.TemporaryDirectory() as tmp:
+    built = Path(tmp) / "assignment2.html"
+    built.write_text(page, encoding="utf-8")
+    subprocess.run([str(EDGE), "--headless", "--disable-gpu", "--no-pdf-header-footer",
+                    f"--print-to-pdf={PDF}", str(built)], capture_output=True, check=True)
 print(f"wrote {PDF.name} ({PDF.stat().st_size // 1024} KB)")
 
 try:
