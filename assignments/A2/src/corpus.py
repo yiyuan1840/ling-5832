@@ -69,6 +69,28 @@ def train_test_split(sentences, test_fraction=0.1):
     return sentences[:cut], sentences[cut:]
 
 
+def train_dev_test_split(sentences):
+    """Split a book three ways: training, development, and test.
+
+    TODO 1. See notes/part5-choosing-settings.md.
+
+    Return three lists. Training is for counting, development is for choosing settings,
+    and test is touched exactly once at the end to report the final number.
+
+    Two things to decide rather than copy:
+      - the proportions, which you should work out from how many PASSAGES each split
+        will end up containing, not how many sentences
+      - whether the splits are contiguous slices or drawn from throughout the book;
+        train_test_split below takes the tail, which the report already admits is weak
+
+    Why this exists at all: the current code chooses the vocabulary size, model order
+    and k by comparing accuracy on the test set, then reports that same accuracy as the
+    result. That number is optimistic by an unknown amount, because the settings were
+    picked to suit it.
+    """
+    raise NotImplementedError
+
+
 def make_passages(sentences, words_per_passage):
     """Group consecutive sentences into passages of roughly the given length.
 

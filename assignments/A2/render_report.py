@@ -1,6 +1,7 @@
 # render_report.py -- turn report/assignment2.md into assignment2.pdf.
 #
-#   uv run render_report.py
+#   uv run render_report.py              report/assignment2.md -> assignment2.pdf
+#   uv run render_report.py submission   report/submission.md  -> submission.pdf
 #
 # Edit the Markdown, run this, get the PDF. The styling lives here so the Markdown stays
 # plain text with nothing but content in it.
@@ -13,8 +14,12 @@ from pathlib import Path
 import markdown
 
 HERE = Path(__file__).parent
-SOURCE = HERE / "report" / "assignment2.md"
-PDF = HERE / "assignment2.pdf"
+NAME = sys.argv[1] if len(sys.argv) > 1 else "assignment2"
+SOURCE = HERE / "report" / f"{NAME}.md"
+PDF = HERE / f"{NAME}.pdf"
+
+if not SOURCE.exists():
+    sys.exit(f"no such source: {SOURCE}")
 EDGE = Path(r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe")
 
 # Print styling, carried over from Assignment 1 so the two reports look alike.

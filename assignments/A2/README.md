@@ -51,7 +51,9 @@ The assignment text is in [`assignment2-prompt.md`](assignment2-prompt.md).
 
 All four parts are built and verified. What remains:
 
-- final pass on the report
+- **[`notes/part5-choosing-settings.md`](notes/part5-choosing-settings.md)** — the settings are
+  currently chosen on the test set, which makes the reported accuracy optimistic. Needs a
+  development split, a rerun, and the report updated.
 - author labels for the instructor's test set, once it is released
 
 ## Known weaknesses
