@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Practice Quiz 1 Walkthrough</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --bg: #F6F7F9;
+    --surface: #FFFFFF;
+    --surface-2: #EEF1F5;
+    --ink: #1A2230;
+    --ink-2: #4A5565;
+    --ink-3: #7A8494;
+    --line: #D7DCE4;
+    --accent: #0F6B74;
+    --accent-soft: #DDEFF0;
+    --good: #2A7A4B;
+    --good-soft: #E1F2E7;
+    --warn: #A65E14;
+    --warn-soft: #F8EBDA;
+    --code-bg: #EEF1F5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #121820;
+      --surface: #1A222C;
+      --surface-2: #222C38;
+      --ink: #E7ECF2;
+      --ink-2: #B4BECB;
+      --ink-3: #8592A2;
+      --line: #313C4A;
+      --accent: #5CC1C8;
+      --accent-soft: #163A3E;
+      --good: #6FCB92;
+      --good-soft: #1B3627;
+      --warn: #E4A25B;
+      --warn-soft: #3B2A16;
+      --code-bg: #222C38;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #121820;
+    --surface: #1A222C;
+    --surface-2: #222C38;
+    --ink: #E7ECF2;
+    --ink-2: #B4BECB;
+    --ink-3: #8592A2;
+    --line: #313C4A;
+    --accent: #5CC1C8;
+    --accent-soft: #163A3E;
+    --good: #6FCB92;
+    --good-soft: #1B3627;
+    --warn: #E4A25B;
+    --warn-soft: #3B2A16;
+    --code-bg: #222C38;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    padding-block: 40px 80px;
+    padding-inline: 20px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; }
+
+  h1, h2, h3 {
+    font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
+    font-weight: 600;
+    line-height: 1.2;
+    text-wrap: balance;
+    margin: 0;
+  }
+  h1 { font-size: 2.3rem; }
+  h2 { font-size: 1.5rem; }
+  h3 { font-size: 1.1rem; font-family: "IBM Plex Sans", sans-serif; font-weight: 600; }
+  p { margin: 0; }
+  a { color: var(--accent); }
+
+  .eyebrow {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-3);
+    font-weight: 500;
+  }
+  header { display: flex; flex-direction: column; gap: 12px; margin-bottom: 36px; }
+  header p.lede { color: var(--ink-2); font-size: 1.05rem; max-width: 60ch; }
+
+  .toc {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin-bottom: 44px;
+  }
+  .toc ol { margin: 8px 0 0; padding-left: 22px; display: grid; gap: 4px; }
+  .toc li a { text-decoration: none; color: var(--ink); }
+  .toc li a:hover { color: var(--accent); text-decoration: underline; }
+  .toc li span { color: var(--ink-3); font-size: 0.9rem; }
+
+  section.q { display: flex; flex-direction: column; gap: 18px; padding-block: 40px; border-top: 1px solid var(--line); }
+  section.q:last-of-type { border-bottom: 1px solid var(--line); }
+  .qhead { display: flex; flex-direction: column; gap: 6px; }
+  .qhead .meta { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .chip {
+    font-size: 0.78rem; font-weight: 500; letter-spacing: 0.03em;
+    padding: 3px 10px; border-radius: 999px;
+    background: var(--surface-2); color: var(--ink-2);
+  }
+  .chip.answer { background: var(--good-soft); color: var(--good); }
+
+  .prompt {
+    background: var(--surface);
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px;
+    color: var(--ink-2);
+    font-size: 0.98rem;
+  }
+  .prompt .options { margin: 8px 0 0; padding-left: 20px; display: grid; gap: 2px; }
+  .prompt .options li.right { color: var(--good); font-weight: 600; }
+
+  .block { display: flex; flex-direction: column; gap: 8px; }
+  .block h3 { color: var(--accent); }
+  .block h3.warn { color: var(--warn); }
+
+  .math {
+    font-family: "IBM Plex Mono", Consolas, monospace;
+    font-size: 0.93rem;
+    background: var(--code-bg);
+    border-radius: 6px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    white-space: pre;
+    line-height: 1.7;
+  }
+  code {
+    font-family: "IBM Plex Mono", Consolas, monospace;
+    font-size: 0.9em;
+    background: var(--code-bg);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+  .steps { margin: 0; padding-left: 22px; display: grid; gap: 8px; }
+  .trap {
+    background: var(--warn-soft);
+    border-radius: 6px;
+    padding: 12px 16px;
+    color: var(--ink);
+  }
+  .trap strong { color: var(--warn); }
+  .corpus {
+    font-family: "IBM Plex Mono", Consolas, monospace;
+    font-size: 0.93rem;
+    background: var(--surface);
+    border: 1px dashed var(--line);
+    border-radius: 6px;
+    padding: 12px 16px;
+    white-space: pre;
+    overflow-x: auto;
+  }
+
+  table { border-collapse: collapse; width: 100%; font-size: 0.95rem; }
+  .tablewrap { overflow-x: auto; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-weight: 600; color: var(--ink-2); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+  td.num { font-variant-numeric: tabular-nums; font-family: "IBM Plex Mono", monospace; font-size: 0.9rem; }
+
+  .sheet {
+    margin-top: 48px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 24px;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .sheet dl { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 10px 18px; }
+  .sheet dt { font-weight: 600; color: var(--ink-2); }
+  .sheet dd { margin: 0; font-family: "IBM Plex Mono", monospace; font-size: 0.92rem; }
+  @media (max-width: 520px) {
+    .sheet dl { grid-template-columns: 1fr; gap: 4px; }
+    .sheet dd { margin-bottom: 10px; }
+    h1 { font-size: 1.9rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+  <p class="eyebrow">CSCI-LING 5832 · Practice Quiz 1 · Chapters 1 to 4</p>
+  <h1>Practice Quiz 1 Walkthrough</h1>
+  <p class="lede">Eight questions, four ideas. Each one below is restated, solved step by step, and paired with the mistake that usually costs the point. A one-page formula sheet is at the bottom.</p>
+</header>
+
+<nav class="toc">
+  <p class="eyebrow">What the quiz covers</p>
+  <ol>
+    <li><a href="#q1">Byte pair encoding vocabulary size</a> <span>tokenization</span></li>
+    <li><a href="#q2">Heaps' Law</a> <span>vocabulary growth</span></li>
+    <li><a href="#q3">Bigram conditional probability</a> <span>n-gram models</span></li>
+    <li><a href="#q4">Bigram sentence probability</a> <span>n-gram models</span></li>
+    <li><a href="#q5">Softmax gradient for one class</a> <span>multinomial logistic regression</span></li>
+    <li><a href="#q6">Cross entropy loss, label 1</a> <span>binary logistic regression</span></li>
+    <li><a href="#q7">Cross entropy loss, label 0</a> <span>binary logistic regression</span></li>
+    <li><a href="#q8">From probability back to logit</a> <span>sigmoid and log odds</span></li>
+  </ol>
+</nav>
+
+<!-- Q1 -->
+<section class="q" id="q1">
+  <div class="qhead">
+    <div class="meta"><span class="chip">Question 1</span><span class="chip">Chapter 2</span><span class="chip answer">Answer: 17</span></div>
+    <h2>Byte pair encoding vocabulary size</h2>
+  </div>
+  <div class="prompt">If you initialize byte pair encoding with a vocabulary of size 9 and then run the algorithm for 8 iterations, how large is the resulting vocabulary?</div>
+
+  <div class="block">
+    <h3>The idea</h3>
+    <p>BPE learns its vocabulary by merging. It starts from a base vocabulary (usually the individual characters, plus an end of word marker), then repeats one operation: find the pair of adjacent symbols that occurs most often in the training text, and glue them into a single new symbol. That new symbol is added to the vocabulary. Nothing is ever removed, because the original symbols are still needed to tokenize words the merges do not cover.</p>
+  </div>
+
+  <div class="block">
+    <h3>Working it out</h3>
+    <div class="math">start           9 symbols
+each iteration  +1 merged symbol
+after 8         9 + 8 = 17</div>
+    <p>So the answer is simply the starting size plus the number of merges. In the textbook's tiny example, the corpus of "low, lower, newest, widest" starts with 11 characters and each merge (e r → er, er _ → er_, n e → ne, and so on) adds exactly one entry.</p>
+  </div>
+
+  <div class="trap"><strong>Common mistake.</strong> Thinking a merge replaces two symbols with one and therefore shrinks the vocabulary by one. It does not. Both original symbols stay in the vocabulary; only the corpus representation gets shorter.</div>
+</section>
+
+<!-- Q2 -->
+<section class="q" id="q2">
+  <div class="qhead">
+    <div class="meta"><span class="chip">Question 2</span><span class="chip">Chapter 2</span><span class="chip answer">Answer: b</span></div>
+    <h2>Heaps' Law</h2>
+  </div>
+  <div class="prompt">Which of the following statements follows from Heaps' Law when applied with the usual values for its constants?
+    <ol class="options" type="a">
+      <li>Growth in the size of a vocabulary approaches a fixed ceiling as a function of the size of the corpus.</li>
+      <li class="right">The size of a vocabulary grows without bound as a function of corpus size.</li>
+    </ol>
+  </div>
+
+  <div class="block">
+    <h3>The idea</h3>
+    <p>Heaps' Law relates the number of distinct word types |V| to the number of running tokens N in a corpus:</p>
+    <div class="math">|V| = k · N^β        with 0 &lt; β &lt; 1, typically about 0.4 to 0.6</div>
+    <p>The exponent β is positive, so as N grows, |V| keeps growing too. Because β is less than 1 the growth slows down (a square root curve is the mental picture), but slowing down is not the same as stopping. There is no limit that |V| converges to.</p>
+  </div>
+
+  <div class="block">
+    <h3>Why option a is tempting but wrong</h3>
+    <p>If you plot |V| against N the curve visibly flattens, and it is natural to read that as "approaching a ceiling". But a ceiling would require β = 0. With any positive β, doubling the corpus always adds new types, just fewer of them each time. This matches everyday experience: no matter how much text you collect, you keep encountering new names, typos, technical terms, and coinages. It is also the reason unknown words are a permanent fact of life in language modeling, and why subword tokenization (Question 1) exists.</p>
+  </div>
+
+  <div class="trap"><strong>Common mistake.</strong> Confusing Heaps' Law (vocabulary size vs. corpus size) with Zipf's Law (word frequency vs. frequency rank). Both are power laws about vocabulary, and both appear in Chapter 2, but they answer different questions.</div>
+</section>
+
+<!-- Q3 -->
+<section class="q" id="q3">
+  <div class="qhead">
+    <div class="meta"><span class="chip">Question 3</span><span class="chip">Chapter 3</span><span class="chip answer">Answer: 1</span></div>
+    <h2>Bigram conditional probability</h2>
+  </div>
+  <div class="corpus">&lt;s&gt; some are fast &lt;/s&gt;
+&lt;s&gt; and some are slow &lt;/s&gt;
+&lt;s&gt; some are high &lt;/s&gt;
+&lt;s&gt; and some are low &lt;/s&gt;</div>
+  <div class="prompt">Using the corpus above, what is the conditional probability of seeing "some" having just seen the word "and", i.e. P(some | and)? Assume a bigram approach and no smoothing. Treat &lt;s&gt; and &lt;/s&gt; as regular tokens.</div>
+
+  <div class="block">
+    <h3>The idea</h3>
+    <p>A bigram model with no smoothing is just counting. The probability of a word given the previous word is the number of times the pair occurs, divided by the number of times the previous word occurs at all:</p>
+    <div class="math">P(w₂ | w₁) = count(w₁ w₂) / count(w₁)</div>
+  </div>
+
+  <div class="block">
+    <h3>Working it out</h3>
+    <ol class="steps">
+      <li>Count "and" in the corpus: it appears in lines 2 and 4, so count(and) = 2.</li>
+      <li>Count the pair "and some": in both of those lines the next word is "some", so count(and some) = 2.</li>
+      <li>Divide: 2 / 2 = 1.</li>
+    </ol>
+    <p>Every time this corpus says "and", the next word is "some", so the model is certain. That is a normal outcome for an unsmoothed model trained on four sentences; the counts are tiny, so probabilities land on round numbers like 0, 0.25, 0.5, and 1.</p>
+  </div>
+
+  <div class="trap"><strong>Common mistake.</strong> Dividing by the total number of tokens (which would give a joint probability, P(and, some)) instead of dividing by count(and). The conditional probability asks "out of the times we saw 'and', how often was 'some' next?", so the denominator is count(and).</div>
+</section>
+
+<!-- Q4 -->
+<section class="q" id="q4">
+  <div class="qhead">
+    <div class="meta"><span class="chip">Question 4</span><span class="chip">Chapter 3</span><span class="chip answer">Answer: 0.125</span></div>
+    <h2>Bigram sentence probability</h2>
+  </div>
+  <div class="prompt">Given the same corpus and a bigram model with no smoothing, what probability is assigned to the sentence <code>&lt;s&gt; some are low &lt;/s&gt;</code>? Give a decimal, not a fraction.</div>
+
+  <div class="block">
+    <h3>The idea</h3>
+    <p>The bigram model approximates the probability of a whole sentence as the product of one conditional probability per word, each conditioned only on the word before it. Including the start and end tokens, the sentence has four bigrams:</p>
+    <div class="math">P(&lt;s&gt; some are low &lt;/s&gt;)
+  = P(some | &lt;s&gt;) · P(are | some) · P(low | are) · P(&lt;/s&gt; | low)</div>
+  </div>
+
+  <div class="block">
+    <h3>Working it out</h3>
+    <div class="tablewrap">
+    <table>
+      <thead><tr><th>Bigram</th><th>Pair count</th><th>First word count</th><th>Probability</th></tr></thead>
+      <tbody>
+        <tr><td>P(some | &lt;s&gt;)</td><td class="num">2</td><td class="num">4</td><td class="num">0.5</td></tr>
+        <tr><td>P(are | some)</td><td class="num">4</td><td class="num">4</td><td class="num">1</td></tr>
+        <tr><td>P(low | are)</td><td class="num">1</td><td class="num">4</td><td class="num">0.25</td></tr>
+        <tr><td>P(&lt;/s&gt; | low)</td><td class="num">1</td><td class="num">1</td><td class="num">1</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="math">0.5 × 1 × 0.25 × 1 = 0.125</div>
+    <p>Two of the four lines begin with "some", so the first factor is 0.5. "are" appears four times and is followed by "low" only once, giving 0.25. The other two bigrams are certain. Notice that the sentence being scored is literally line 4 of the corpus minus the word "and", yet its probability is well below 1, because the model only remembers pairs, not whole lines.</p>
+  </div>
+
+  <div class="trap"><strong>Common mistake.</strong> Forgetting the &lt;s&gt; and &lt;/s&gt; tokens. Dropping P(some | &lt;s&gt;) would give 0.25 instead of 0.125. The question says to treat them as regular tokens, and in general the start token is what lets the model score the first real word at all.</div>
+</section>
+
+<!-- Q5 -->
+<section class="q" id="q5">
+  <div class="qhead">
+    <div class="meta"><span class="chip">Question 5</span><span class="chip">Chapter 4</span><span class="chip answer">Answer: [1.8, -0.6, -2.4, -0.6]</span></div>
+    <h2>Softmax gradient for one class</h2>
+  </div>
+  <div class="prompt">Three way authorship classification with logistic regression: classes John, James, Alex. A training document from class James has feature vector [-3, 1, 4, 1]. The current model returns the softmax vector [0.2, 0.4, 0.4] over John, James, Alex. Give the gradient of the cross entropy loss for the James class.</div>
+
+  <div class="block">
+    <h3>The idea</h3>
+    <p>For multinomial logistic regression, each class c has its own weight vector w<sub>c</sub>. The gradient of the cross entropy loss with respect to w<sub>c</sub> has a remarkably simple form:</p>
+    <div class="math">∂L/∂w_c = (ŷ_c − y_c) · x
+
+ŷ_c  the softmax probability the model gave class c
+y_c  1 if c is the true class, otherwise 0
+x    the input feature vector</div>
+    <p>In words: take the model's probability for that class, subtract what it should have been, and scale the input vector by that difference. This is the multi class version of the (ŷ − y)·x rule for binary logistic regression, and it is what gradient descent uses to update each class's weights.</p>
+  </div>
+
+  <div class="block">
+    <h3>Working it out</h3>
+    <ol class="steps">
+      <li>James is the true class, so y<sub>James</sub> = 1.</li>
+      <li>The model gave James ŷ<sub>James</sub> = 0.4.</li>
+      <li>The scalar is 0.4 − 1 = −0.6.</li>
+      <li>Multiply every element of x by −0.6:</li>
+    </ol>
+    <div class="math">−0.6 × [−3, 1, 4, 1] = [1.8, −0.6, −2.4, −0.6]</div>
+    <p>The negative factor tells you the update will move the James weights in the same direction as x (since weights move against the gradient), which raises the score for the correct class. For the wrong classes the factor is positive: John's would be 0.2 − 0 = 0.2 and Alex's 0.4 − 0 = 0.4, pushing their weights away from x.</p>
+  </div>
+
+  <div class="trap"><strong>Common mistake.</strong> Getting the sign backwards by computing (y − ŷ)·x. That is the negative gradient, which is a valid update direction, but the question asks for the gradient itself. The first element being positive (1.8) is the tell.</div>
+</section>
+
+<!-- Q6 -->
+<section class="q" id="q6">
+  <div class="qhead">
+    <div class="meta"><span class="chip">Question 6</span><span class="chip">Chapter 4</span><span class="chip answer">Answer: −log 0.4</span></div>
+    <h2>Cross entropy loss, label 1</h2>
+  </div>
+  <div class="prompt">Training example {x, 1} in binary logistic regression. The classifier assigns 0.4 to this input. What is the cross entropy loss for this single example?</div>
+
+  <div class="block">
+    <h3>The idea</h3>
+    <p>Binary cross entropy loss for one example is</p>
+    <div class="math">L(ŷ, y) = −[ y · log(ŷ) + (1 − y) · log(1 − ŷ) ]</div>
+    <p>Only one of the two terms survives, because y is either 0 or 1. The whole formula is a compact way of saying: take the negative log of the probability the model assigned to whichever answer was actually correct.</p>
+  </div>
+
+  <div class="block">
+    <h3>Working it out</h3>
+    <p>Here y = 1, so the second term is multiplied by zero and disappears:</p>
+    <div class="math">L = −log(ŷ) = −log(0.4) ≈ 0.92</div>
+    <p>Because 0.4 is less than 1, log(0.4) is negative, and the minus sign in front makes the loss positive. A model that had said 0.9 would have loss −log 0.9 ≈ 0.11, and one that said 1.0 would have loss 0. Lower confidence in the right answer means a bigger penalty.</p>
+  </div>
+
+  <div class="trap"><strong>Common mistake.</strong> Choosing −log 0.6 because it "looks like the leftover". The 0.6 is the probability the model gave to class 0, which is not the true class here.</div>
+</section>
+
+<!-- Q7 -->
+<section class="q" id="q7">
+  <div class="qhead">
+    <div class="meta"><span class="chip">Question 7</span><span class="chip">Chapter 4</span><span class="chip answer">Answer: −log 0.7</span></div>
+    <h2>Cross entropy loss, label 0</h2>
+  </div>
+  <div class="prompt">Training example {x, 0}. The classifier assigns 0.3 to this input. What is the cross entropy loss for this single example?</div>
+
+  <div class="block">
+    <h3>Working it out</h3>
+    <p>Same formula as Question 6, but now y = 0, so the first term vanishes and the second stays:</p>
+    <div class="math">L = −(1 − 0) · log(1 − ŷ) = −log(1 − 0.3) = −log(0.7) ≈ 0.36</div>
+    <p>The classifier outputs the probability of class 1. Saying 0.3 for class 1 is the same as saying 0.7 for class 0, and class 0 is the correct label, so 0.7 is the probability of the right answer. The loss is fairly small, which makes sense: the model leaned the right way.</p>
+  </div>
+
+  <div class="block">
+    <h3>One rule for both questions</h3>
+    <p>Questions 6 and 7 are mirror images. In both cases the loss is −log of the probability the model assigned to the true label. When the label is 1 that probability is ŷ; when the label is 0 it is 1 − ŷ. If you keep that sentence in your head you never need to expand the full formula.</p>
+  </div>
+
+  <div class="trap"><strong>Common mistake.</strong> Picking −log 0.3. That would be the loss if the label had been 1. Always ask first: what did the model say about the answer that was actually correct?</div>
+</section>
+
+<!-- Q8 -->
+<section class="q" id="q8">
+  <div class="qhead">
+    <div class="meta"><span class="chip">Question 8</span><span class="chip">Chapter 4</span><span class="chip answer">Answer: ln(3)</span></div>
+    <h2>From probability back to logit</h2>
+  </div>
+  <div class="prompt">A binary classifier has assigned a probability of 0.75 to an item. Which of the following characterizes the logit that gave rise to this probability? Options: 3, ln(3), −ln(0.75), −ln(0.25).</div>
+
+  <div class="block">
+    <h3>The idea</h3>
+    <p>In logistic regression the raw score z = w·x + b (the logit) is squashed into a probability by the sigmoid function. The logit function is the inverse of that, and it equals the natural log of the odds:</p>
+    <div class="math">sigmoid:  p = σ(z) = 1 / (1 + e^(−z))
+logit:    z = ln( p / (1 − p) )</div>
+  </div>
+
+  <div class="block">
+    <h3>Working it out</h3>
+    <ol class="steps">
+      <li>Odds = p / (1 − p) = 0.75 / 0.25 = 3.</li>
+      <li>Logit = ln(odds) = ln(3) ≈ 1.10.</li>
+    </ol>
+    <p>Sanity check: σ(1.10) = 1 / (1 + e<sup>−1.10</sup>) = 1 / (1 + 0.333) = 0.75. A positive logit should give a probability above 0.5, and it does. A logit of 0 would give exactly 0.5, and a negative logit gives less than 0.5.</p>
+  </div>
+
+  <div class="trap"><strong>Common mistake.</strong> Answering 3, which is the odds rather than the log odds. The other two distractors, −ln(0.75) and −ln(0.25), are cross entropy loss expressions (see Questions 6 and 7), not logits. The quiz is deliberately mixing the two ideas to see whether you keep them apart.</div>
+</section>
+
+<div class="sheet">
+  <p class="eyebrow">Formula sheet for this quiz</p>
+  <dl>
+    <dt>BPE vocabulary</dt><dd>|V| after k merges = |V₀| + k</dd>
+    <dt>Heaps' Law</dt><dd>|V| = k · N^β,  0 &lt; β &lt; 1</dd>
+    <dt>Bigram probability</dt><dd>P(w₂ | w₁) = count(w₁ w₂) / count(w₁)</dd>
+    <dt>Sentence probability</dt><dd>P(w₁…wₙ) ≈ ∏ P(wᵢ | wᵢ₋₁), including &lt;s&gt; and &lt;/s&gt;</dd>
+    <dt>Binary CE loss</dt><dd>L = −[ y log ŷ + (1 − y) log(1 − ŷ) ]</dd>
+    <dt>Binary gradient</dt><dd>∂L/∂w = (ŷ − y) · x</dd>
+    <dt>Softmax gradient</dt><dd>∂L/∂w_c = (ŷ_c − y_c) · x</dd>
+    <dt>Sigmoid</dt><dd>σ(z) = 1 / (1 + e^(−z))</dd>
+    <dt>Logit</dt><dd>z = ln( p / (1 − p) )</dd>
+  </dl>
+  <p style="color: var(--ink-3); font-size: 0.9rem;">Chapter references follow Jurafsky &amp; Martin, Speech and Language Processing: Chapter 2 (text normalization and tokenization), Chapter 3 (n-gram language models), Chapter 4 (logistic regression).</p>
+</div>
+</div>
+</body>
+</html>

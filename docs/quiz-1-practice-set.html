@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quiz 1 Practice Set</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --bg: #F6F7F9; --surface: #FFFFFF; --surface-2: #EEF1F5;
+    --ink: #1A2230; --ink-2: #4A5565; --ink-3: #7A8494; --line: #D7DCE4;
+    --accent: #0F6B74; --accent-soft: #DDEFF0;
+    --good: #2A7A4B; --good-soft: #E1F2E7;
+    --bad: #A63A2E; --bad-soft: #F8E3DF;
+    --warn: #A65E14; --warn-soft: #F8EBDA;
+    --code-bg: #EEF1F5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #121820; --surface: #1A222C; --surface-2: #222C38;
+      --ink: #E7ECF2; --ink-2: #B4BECB; --ink-3: #8592A2; --line: #313C4A;
+      --accent: #5CC1C8; --accent-soft: #163A3E;
+      --good: #6FCB92; --good-soft: #1B3627;
+      --bad: #E8837A; --bad-soft: #3D1F1B;
+      --warn: #E4A25B; --warn-soft: #3B2A16;
+      --code-bg: #222C38;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #121820; --surface: #1A222C; --surface-2: #222C38;
+    --ink: #E7ECF2; --ink-2: #B4BECB; --ink-3: #8592A2; --line: #313C4A;
+    --accent: #5CC1C8; --accent-soft: #163A3E;
+    --good: #6FCB92; --good-soft: #1B3627;
+    --bad: #E8837A; --bad-soft: #3D1F1B;
+    --warn: #E4A25B; --warn-soft: #3B2A16;
+    --code-bg: #222C38;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "IBM Plex Sans", "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 16.5px; line-height: 1.6;
+    padding-block: 40px 80px; padding-inline: 20px;
+  }
+  .wrap { max-width: 740px; margin: 0 auto; }
+  h1, h2 { font-family: "Source Serif 4", Georgia, serif; font-weight: 600; line-height: 1.2; text-wrap: balance; margin: 0; }
+  h1 { font-size: 2.3rem; }
+  h2 { font-size: 1.45rem; }
+  p { margin: 0; }
+  .eyebrow { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); font-weight: 500; }
+  header { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
+  header .lede { color: var(--ink-2); font-size: 1.05rem; max-width: 62ch; }
+
+  .scorebar {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+    padding: 10px 16px; margin-bottom: 36px;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; font-size: 0.95rem;
+  }
+  .scorebar strong { font-variant-numeric: tabular-nums; }
+  .scorebar .spacer { flex: 1; }
+  .scorebar button { font-size: 0.85rem; }
+
+  .toc { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px 22px; margin-bottom: 40px; }
+  .toc ol { margin: 8px 0 0; padding-left: 22px; display: grid; gap: 4px; }
+  .toc a { text-decoration: none; color: var(--ink); }
+  .toc a:hover { color: var(--accent); text-decoration: underline; }
+  .toc span { color: var(--ink-3); font-size: 0.9rem; }
+
+  section.group { padding-block: 36px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 10px; }
+  section.group > p.intro { color: var(--ink-2); max-width: 65ch; margin-bottom: 8px; }
+
+  .q { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 20px 22px; display: flex; flex-direction: column; gap: 12px; margin-top: 14px; }
+  .q .meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .chip { font-size: 0.76rem; font-weight: 500; letter-spacing: 0.03em; padding: 3px 10px; border-radius: 999px; background: var(--surface-2); color: var(--ink-2); }
+  .chip.src { background: var(--accent-soft); color: var(--accent); }
+  .q .stem { font-size: 1.02rem; }
+  .q .stem p + p { margin-top: 8px; }
+  .given {
+    font-family: "IBM Plex Mono", Consolas, monospace; font-size: 0.9rem;
+    background: var(--code-bg); border-radius: 6px; padding: 10px 14px; white-space: pre; overflow-x: auto; line-height: 1.7;
+  }
+  code { font-family: "IBM Plex Mono", Consolas, monospace; font-size: 0.9em; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+
+  .opts { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+  .opts label { display: flex; gap: 10px; align-items: flex-start; padding: 8px 12px; border: 1px solid var(--line); border-radius: 6px; cursor: pointer; background: var(--bg); }
+  .opts label:hover { border-color: var(--accent); }
+  .opts input { margin-top: 5px; flex: none; }
+  .opts label.hit { border-color: var(--good); background: var(--good-soft); }
+  .opts label.miss { border-color: var(--bad); background: var(--bad-soft); }
+
+  .numrow { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .numrow input[type="text"] {
+    font-family: "IBM Plex Mono", monospace; font-size: 1rem; padding: 7px 10px; width: 12rem; max-width: 100%;
+    border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink);
+  }
+  .numrow input[type="text"]:focus, button:focus-visible, .opts input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .numrow .unit { color: var(--ink-3); font-size: 0.9rem; }
+
+  button { font-family: inherit; font-size: 0.92rem; font-weight: 500; padding: 7px 14px; border-radius: 6px; border: 1px solid var(--accent); background: var(--accent); color: #fff; cursor: pointer; }
+  button.ghost { background: transparent; color: var(--accent); }
+  button:disabled { opacity: 0.5; cursor: default; }
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .verdict { font-weight: 600; }
+  .verdict.ok { color: var(--good); }
+  .verdict.no { color: var(--bad); }
+
+  .explain { border-left: 3px solid var(--accent); padding: 10px 16px; background: var(--bg); border-radius: 0 6px 6px 0; display: flex; flex-direction: column; gap: 8px; font-size: 0.97rem; }
+  .explain[hidden] { display: none; }
+  .explain .ans { font-weight: 600; }
+  .explain .note { color: var(--ink-2); }
+  .explain .flag { background: var(--warn-soft); border-radius: 6px; padding: 8px 12px; }
+  .explain .flag strong { color: var(--warn); }
+
+  .tablewrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.93rem; }
+  th, td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-weight: 600; color: var(--ink-2); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+  td.num { font-variant-numeric: tabular-nums; font-family: "IBM Plex Mono", monospace; font-size: 0.88rem; }
+
+  footer { margin-top: 48px; color: var(--ink-3); font-size: 0.9rem; max-width: 65ch; }
+  @media (max-width: 520px) { h1 { font-size: 1.9rem; } .q { padding: 16px; } }
+  @media (prefers-reduced-motion: no-preference) { .q { scroll-margin-top: 80px; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+  <p class="eyebrow">CSCI-LING 5832 · Quiz 1 preparation · Lectures 1 to 6</p>
+  <h1>Quiz 1 Practice Set</h1>
+  <p class="lede">Forty seven questions built from the worked examples in Jim Martin's lecture slides: the sentence he counts words in, the BPE corpus he merges by hand, the Berkeley restaurant counts, the hotel review feature vector, the Federalist softmax, the gradient step. Answer each one, check it, and read the explanation, which names the slide it came from.</p>
+</header>
+
+<div class="scorebar" id="scorebar">
+  <span>Checked <strong id="s-done">0</strong> of <strong id="s-total">0</strong></span>
+  <span>Correct <strong id="s-right">0</strong></span>
+  <span class="spacer"></span>
+  <button class="ghost" id="reveal-all" type="button">Reveal all answers</button>
+  <button class="ghost" id="reset-all" type="button">Reset</button>
+</div>
+
+<nav class="toc">
+  <p class="eyebrow">Sections</p>
+  <ol>
+    <li><a href="#g1">Words, tokens and morphology</a> <span>lectures 1 and 2</span></li>
+    <li><a href="#g2">Corpora, Heaps' Law and Zipf's Law</a> <span>lecture 2</span></li>
+    <li><a href="#g3">Byte pair encoding</a> <span>lecture 3</span></li>
+    <li><a href="#g4">N-gram language models</a> <span>lecture 4</span></li>
+    <li><a href="#g5">Evaluating language models</a> <span>lectures 4 and 5</span></li>
+    <li><a href="#g6">Logistic regression: scoring, logits, softmax</a> <span>lectures 5 and 6</span></li>
+    <li><a href="#g7">Learning: loss, gradients, updates</a> <span>lecture 6</span></li>
+    <li><a href="#g8">Evaluating classifiers</a> <span>lecture 6</span></li>
+  </ol>
+</nav>
+
+<div id="quiz"></div>
+
+<footer>
+  <p>Slide numbers refer to the lecture_01 to lecture_06 decks. The practice quiz on Canvas drew on exactly this kind of example (BPE vocabulary size, bigram counts on a tiny corpus, cross entropy loss, the softmax gradient, the logit), so the numeric questions here follow the same "give a number" format. Where the slides and the textbook disagree on a constant, the explanation says so.</p>
+</footer>
+</div>
+
+<script>
+const GROUPS = [
+{ id: 'g1', title: 'Words, tokens and morphology', src: 'Lectures 1 and 2',
+  intro: 'Lecture 1 opens with a clicker question about counting words in one sentence, then spends its second half on morphemes, inflection versus derivation, and the three kinds of evidence for a part of speech. Lecture 2 adds derivational examples and language typology.',
+  qs: [
+  { type: 'mc', src: 'L1 slide 25', tags: ['types vs tokens'],
+    stem: 'Consider the fragment <em>They lay back on the San Francisco grass and looked at the stars and didn\'t</em>. The lecture offers four defensible word counts: 13, 14, 15 and 16. Which count is the number of <strong>types</strong>?',
+    opts: ['15', '14', '13', '16'], ans: 2,
+    exp: 'Splitting on whitespace gives 15 tokens. Two of them repeat ("the" twice, "and" twice), so there are 13 distinct types. The other counts come from different tokenization choices: 14 if "San Francisco" is one word, 16 if "didn\'t" is split into "did" and "n\'t". The slide\'s point is that "how many words" has no single answer until you fix your definitions, which is also the whole premise of Homework 1 Part 1.' },
+  { type: 'mc', src: 'L1 slides 29 to 30, L2 slides 4 to 7', tags: ['morphology'],
+    stem: 'Which of these word pairs is an example of <strong>inflectional</strong> morphology, where the result keeps the same word class as the original?',
+    opts: ['serve → servant', 'compute → computer', 'cat → cats', 'clue → clueless'], ans: 2,
+    exp: 'Inflection adds a grammatical marker (plural, tense) without changing the word class: "cats" is still a noun. The other three are derivational: they change the class or the core meaning (verb serve → noun servant, verb compute → noun computer, noun clue → adjective clueless). Lecture 2 lists exactly these derivational examples.' },
+  { type: 'num', src: 'L2 slide 5', tags: ['morphology'],
+    stem: 'Lecture 2 builds the chain <em>compute → computer → computerize → computerization</em>. How many derivational affixes have been added to the stem <em>compute</em> by the end of the chain?',
+    ans: 3, tol: 0, unit: 'affixes',
+    exp: 'Three: -er (verb → noun), -ize (noun → verb), -ation (verb → noun). Each step is derivational because it changes the word class. Counting morphemes, "computerization" has four: the stem plus three affixes.' },
+  { type: 'mc', src: 'L1 slides 32 to 34', tags: ['parts of speech'],
+    stem: 'The slides give three sources of evidence for assigning a part of speech. Observing that <em>crash</em> appears in "the crash", "a crash", "two crashes" and "the big crash" is which kind of evidence that it is a noun?',
+    opts: ['Semantic evidence', 'Morphological evidence', 'Distributional evidence', 'Etymological evidence'], ans: 2,
+    exp: 'Distributional: nouns are the things that follow determiners (the, a, two) and adjectives (big). The morphological evidence in the same set of slides is the pattern walk, walking, walked, walks, which marks a verb because those are the affixes verbs take. Semantic evidence ("a noun names a person, place or thing") is the third source and the least reliable one.' },
+  { type: 'mc', src: 'L2 slides 9 to 11', tags: ['typology'],
+    stem: 'The Turkish word <em>Uygarlastiramadiklarimizdanmissinizcasina</em> ("as if you are among those whom we could not civilize") is built by concatenating a stem with about ten clearly separable affixes. On the two typology dimensions from lecture 2, Turkish is:',
+    opts: ['Isolating and fusional', 'Synthetic and agglutinating', 'Isolating and agglutinating', 'Synthetic and fusional'], ans: 1,
+    exp: 'Many morphemes per word makes it synthetic (the opposite of isolating); morphemes that stay recognizable when concatenated makes it agglutinating (the opposite of fusional). English sits near the isolating end but shows both properties: walk/walked/walking is agglutinating in style, while catch/caught and ring/rang are fusional, because the morphemes fuse and change the surface form.' },
+]},
+
+{ id: 'g2', title: 'Corpora, Heaps\' Law and Zipf\'s Law', src: 'Lecture 2',
+  intro: 'Lecture 2 counts Shakespeare\'s vocabulary with Unix tools, compares four corpora by tokens and types, and introduces the two power laws that show up again in language modeling.',
+  qs: [
+  { type: 'mc', src: 'L2 slides 19 to 20', tags: ['normalization'],
+    stem: 'In the Shakespeare pipeline, the first pass counted about 29,000 word types. After one more Unix command the count dropped to about 23,000. Which command caused the drop?',
+    opts: ['sort, which removed duplicate lines', 'tr to translate upper case to lower case', 'uniq -c, which added frequency counts', 'wc, which counted lines instead of words'], ans: 1,
+    exp: 'Lowercasing merges "The" and "the" (and every other capitalized variant) into one type. sort only orders lines, uniq collapses identical adjacent lines but does not change case, and wc only counts. The lecture also notes the count is still generous, since "abandon" and "abandoned" remain separate types.' },
+  { type: 'mc', src: 'L2 slide 21', tags: ['normalization'],
+    stem: 'The frequency ranked Shakespeare list had the single letters <em>s</em> and <em>d</em> among the most common "words". Why?',
+    opts: ['They are common abbreviations in Elizabethan English', 'The tr command that replaced every non letter with a newline split possessives and clitics like "\'s", "we\'d" and "I\'d" at the apostrophe', 'They are section markers in the Project Gutenberg file', 'Shakespeare used single letter words for metrical reasons'], ans: 1,
+    exp: 'Translating anything that is not a letter into a newline treats the apostrophe as a separator, so "king\'s" becomes "king" and "s", and "we\'d" becomes "we" and "d". The lecture uses this artifact to motivate careful tokenization and regular expressions.' },
+  { type: 'mc', src: 'L2 slide 26', tags: ['corpora'],
+    stem: 'The lecture\'s corpus table lists Switchboard (2.4M tokens, 20K types), Shakespeare (884K tokens, 23K types), Common Crawl 2017 (600B tokens, 1.9M types) and the Google N-gram corpus (1 trillion tokens, 13M types). Which conclusion does the lecture draw from the last two rows?',
+    opts: ['English has about 13 million words', 'Web text has a smaller vocabulary than literary text', 'A unique word form in a corpus is not the same thing as a word; names, numbers, misspellings and markup inflate the type count', 'Larger corpora eventually stop producing new types'], ans: 2,
+    exp: '13 million types is far more than any estimate of the number of English words, so a type is not a word. The lecture also notes the Switchboard case: spoken conversation uses a strikingly small share of the vocabulary, which matters for spoken assistants.' },
+  { type: 'num', src: 'L2 slides 27 to 28', tags: ['Heaps\' Law'],
+    stem: 'Heaps\' Law says |V| = k · N<sup>β</sup>. Suppose β = 0.5. If you quadruple the size of a corpus, by what factor does the vocabulary grow?',
+    ans: 2, tol: 0.01, unit: 'times larger',
+    exp: '4<sup>0.5</sup> = 2, so the vocabulary doubles. The lecture\'s summary is that vocabulary grows "somewhat faster than the square root of the corpus size" and, critically, never flattens out.',
+    flag: 'The slides say β is usually between 0.6 and 0.7 and k between 10 and 100. The August 2026 textbook draft (Eq. 2.5) says reported β values run 0.44 to 0.56. If a quiz question gives the constants, use the ones it gives; if it asks for the "usual" range, the safest answer is whichever source the question cites. The qualitative conclusion is the same either way.' },
+  { type: 'num', src: 'L2 slide 22, L4 slide 40', tags: ['Zipf\'s Law'],
+    stem: 'Zipf\'s Law says a word\'s frequency is roughly inversely proportional to its frequency rank. In the Shakespeare counts the most frequent word appears about 14,000 times. Under Zipf\'s Law, about how many times would you expect the 1,000th most frequent word to appear?',
+    ans: 14, tol: 1, unit: 'occurrences',
+    exp: 'Frequency of rank r is about f(1) / r, so 14,000 / 1,000 = 14. Lecture 4 uses this to explain why n-gram counts are sparse: a handful of events have large counts, a huge number appear once, and most possible events never appear at all.' },
+]},
+
+{ id: 'g3', title: 'Byte pair encoding', src: 'Lecture 3',
+  intro: 'Lecture 3 runs BPE by hand on the six word corpus <code>set new new renew reset renew</code>, with whitespace treated as the leading character of each word. These questions follow that example step by step, then the GPT-2 numbers.',
+  qs: [
+  { type: 'num', src: 'L3 slide 9', tags: ['BPE'],
+    stem: 'The training corpus is <code>set␣new␣new␣renew␣reset␣renew</code>, with ␣ attached to the front of every word except the first. What is the size of the <strong>initial</strong> vocabulary (the set of individual symbols)?',
+    given: 'corpus (with counts)      vocabulary\n2   ␣ n e w\n2   ␣ r e n e w\n1   s e t\n1   ␣ r e s e t',
+    ans: 7, tol: 0, unit: 'symbols',
+    exp: 'Seven: ␣, e, n, r, s, t, w. The space counts as a symbol because the lecture keeps it (as a word initial marker) rather than throwing it away.' },
+  { type: 'mc', src: 'L3 slide 10', tags: ['BPE'],
+    stem: 'Before any merge, which adjacent pair has the highest count in this corpus, and what is that count?',
+    opts: ['(␣, r) with count 3', '(n, e) with count 4, tied with (e, w)', '(e, t) with count 2', '(r, e) with count 4'], ans: 1,
+    exp: '"n e" occurs in both copies of new and both copies of renew (4). So does "e w". (␣ r) and (r e) occur 3 times, (e t) and (s e) twice. The lecture breaks the tie by merging (n, e) first, then (ne, w). Tie breaking is arbitrary; the quiz would tell you which to pick.' },
+  { type: 'num', src: 'L3 slides 11 to 14', tags: ['BPE'],
+    stem: 'The lecture performs eight merges in this order: (n,e), (ne,w), (␣,r), (␣r,e), (␣,new), (␣re,new), (s,e), (se,t). How large is the vocabulary after all eight?',
+    ans: 15, tol: 0, unit: 'entries',
+    exp: '7 + 8 = 15, exactly the same arithmetic as the practice quiz question that started from 9 and did 8 merges. Slide 14 lists the final vocabulary: ␣, e, n, r, s, t, w, ne, new, ␣r, ␣re, ␣new, ␣renew, se, set.' },
+  { type: 'mc', src: 'L3 slide 15', tags: ['BPE encoding'],
+    stem: 'Tokenize the new input <code>reset</code> (no leading space) by applying the eight learned merges greedily, in the order they were learned. What is the result?',
+    opts: ['[reset]', '[re, set]', '[r, e, set]', '[r, e, s, e, t]'], ans: 2,
+    exp: 'Walk the merge list: (n,e) and (ne,w) do not apply, and none of the ␣ merges apply because there is no space. (s,e) turns "r e s e t" into "r e se t", then (se,t) gives "r e set". No merge ever joined a bare "r" and "e" (the learned merge was ␣r + e), so the answer is three tokens: r, e, set. This is the point of the exercise: encoding replays the merges in learned order, it does not search for the best segmentation.' },
+  { type: 'mc', src: 'L3 slide 15', tags: ['BPE encoding'],
+    stem: 'Tokenize the input <code>set renew</code> with the same merge list. How many tokens result, and what are they?',
+    opts: ['2 tokens: [set, ␣renew]', '3 tokens: [set, ␣re, new]', '4 tokens: [se, t, ␣re, new]', '2 tokens: [set, renew]'], ans: 0,
+    exp: 'Start from s e t ␣ r e n e w. (n,e) then (ne,w) give s e t ␣ r e new; (␣,r) then (␣r,e) give s e t ␣re new; (␣,new) cannot apply because the space is already inside ␣re; (␣re,new) gives ␣renew; finally (s,e) and (se,t) give set. Two tokens, and note the second one carries its leading space, which is why the lecture says "dog" and "␣dog" are different vocabulary entries.' },
+  { type: 'num', src: 'L3 slide 8 notes', tags: ['BPE'],
+    stem: 'GPT-2\'s tokenizer started from an initial vocabulary of 257 items and ran 50,000 merges. What is the size of its final vocabulary?',
+    ans: 50257, tol: 0, unit: 'tokens',
+    exp: '257 + 50,000 = 50,257, the well known GPT-2 vocabulary size. The lecture adds that GPT-4 is over 100K and Gemini 256K, and that larger vocabularies trade memory for shorter token sequences.' },
+  { type: 'mc', src: 'L3 slides 19 and 23', tags: ['BPE tradeoffs'],
+    stem: 'Which statement about subword tokenization is <strong>consistent</strong> with the lecture?',
+    opts: ['A smaller vocabulary produces shorter input sequences', 'Words absent from the training corpus cause out of vocabulary errors', 'A smaller vocabulary lowers memory cost but makes input sequences longer, which raises compute cost roughly quadratically and raises API bills that charge per token', 'BPE merges are chosen to align with morpheme boundaries'], ans: 2,
+    exp: 'That is the tradeoff slide almost verbatim. Option 2 is backwards: with BPE there are effectively no OOV words, because anything can be decomposed down to characters or bytes. Option 4 is wrong too; the lecture\'s Llama 3 example shows "volcanoes" split as volcan + oes, which is not a morpheme boundary. Tokens are only a crude approximation of morphemes.' },
+]},
+
+{ id: 'g4', title: 'N-gram language models', src: 'Lecture 4',
+  intro: 'Lecture 4 goes from the chain rule to the Markov assumption, then works the Berkeley Restaurant Project (BeRP) numbers, the Shakespeare sparsity numbers, and add-one smoothing.',
+  qs: [
+  { type: 'mc', src: 'L4 slides 25 to 27', tags: ['Markov assumption'],
+    stem: 'Under a <strong>trigram</strong> model, which approximation replaces P(transparent | the water is so)?',
+    opts: ['P(transparent | so)', 'P(transparent | is, so)', 'P(transparent | water, is, so)', 'P(transparent)'], ans: 1,
+    exp: 'An N-gram model conditions on the previous N − 1 words, so a trigram model keeps two words of context: is, so. The bigram version keeps one (so). The lecture calls the naming "odd" for exactly this reason: the N counts the whole sequence including the predicted word, not the context.' },
+  { type: 'num', src: 'L4 slide 24, slide 37', tags: ['sparsity'],
+    stem: 'With a vocabulary of 30,000 word types, how many distinct bigrams are possible? Give the answer in millions.',
+    ans: 900, tol: 0, unit: 'million',
+    exp: '30,000² = 900,000,000, so 900 million. Trigrams are 30,000³ = 27 trillion. A corpus of one million tokens contains at most one million bigram instances, so it cannot possibly give counts for more than a tiny fraction of them. This is the motivation for both the Markov assumption and smoothing.' },
+  { type: 'num', src: 'L4 slides 37 and 39', tags: ['sparsity'],
+    stem: 'Shakespeare\'s corpus has V = 29,066 types and about 844 million possible bigrams, of which 300,000 distinct bigram types actually occur. What percentage of the possible bigrams were never observed? (one decimal place)',
+    ans: 99.96, tol: 0.05, unit: '%',
+    exp: '300,000 / 844,000,000 ≈ 0.036%, so about 99.96% of possible bigrams have a zero count. The lecture calls this "the biggest problem in N-gram language modeling", and it is why a 4-gram Shakespeare generator produces actual Shakespeare: given three words of context there is usually only one continuation with a nonzero count.' },
+  { type: 'num', src: 'L4 slide 30', tags: ['bigram estimate'],
+    stem: 'In the BeRP corpus the bigram <em>want to</em> occurs 608 times and the word <em>want</em> occurs 927 times. What is the maximum likelihood estimate of P(to | want)? (two decimal places)',
+    ans: 0.66, tol: 0.01, unit: '',
+    exp: '608 / 927 = 0.656, about 0.66. The lecture reads this as syntax showing up in the counts: "want" expects an infinitive, so "to" follows it two thirds of the time. The companion number on the slide is P(want | I) = 827 / 2533 ≈ 0.33.' },
+  { type: 'num', src: 'L4 slide 31', tags: ['sentence probability'],
+    stem: 'Using these BeRP bigram probabilities, compute P(&lt;s&gt; I want english food &lt;/s&gt;). Give the answer in scientific notation as a multiple of 10<sup>−5</sup> (for example, enter 4.2 for 4.2 × 10<sup>−5</sup>).',
+    given: 'P(I | &lt;s&gt;)        = 0.25\nP(want | I)       = 0.33\nP(english | want) = 0.0011\nP(food | english) = 0.5\nP(&lt;/s&gt; | food)    = 0.68',
+    ans: 3.1, tol: 0.15, unit: '× 10⁻⁵',
+    exp: '0.25 × 0.33 × 0.0011 × 0.5 × 0.68 = 0.0000309, about 3.1 × 10⁻⁵, which the slide rounds to .000031. Note the &lt;/s&gt; factor: a bigram model must also predict that the sentence ends, and the slide notes that a 9,222 sentence corpus contributes 9,222 &lt;s&gt; and 9,222 &lt;/s&gt; tokens to the counts.' },
+  { type: 'num', src: 'L4 slides 43 to 45', tags: ['add-one smoothing'],
+    stem: 'Apply add-one (Laplace) smoothing to the BeRP bigram <em>I want</em>. Count(I want) = 827, Count(I) = 2533, and the vocabulary size V = 1446. What is P<sub>add-1</sub>(want | I)? (two decimal places)',
+    ans: 0.21, tol: 0.005, unit: '',
+    exp: '(827 + 1) / (2533 + 1446) = 828 / 3979 = 0.208, about 0.21, which is the highlighted cell on slide 45. The unsmoothed value was 0.33, so add-one pulled a lot of probability away from a well attested bigram. The lecture asks "why V?": every one of the V possible continuations of "I" got one extra count, so the denominator grows by V to keep the row summing to 1.' },
+  { type: 'num', src: 'L4 slides 32 and 43', tags: ['add-one smoothing'],
+    stem: 'The bigram <em>want spend</em> never occurs in BeRP (the lecture cites P(want | spend) = 0 as a syntactic fact). With add-one smoothing, Count(want) = 927 and V = 1446, what probability does P<sub>add-1</sub>(spend | want) receive? Give the answer as a multiple of 10<sup>−4</sup>.',
+    ans: 4.2, tol: 0.15, unit: '× 10⁻⁴',
+    exp: '(0 + 1) / (927 + 1446) = 1 / 2373 = 0.00042, so 4.2 × 10⁻⁴. Every unseen continuation of "want" gets this same small probability. That removes the zeros, which is the goal, but it also hands the same probability to syntactically impossible bigrams and merely rare ones, which is why add-one is a baseline rather than a production method.' },
+  { type: 'mc', src: 'L4 slides 34 and 39', tags: ['generation'],
+    stem: 'Autoregressive generation from a bigram model samples a first bigram (&lt;s&gt;, w), then repeatedly samples a bigram whose first word matches the last word generated, until &lt;/s&gt; is drawn. Which of the following is a consequence of training on a corpus with many unseen bigrams?',
+    opts: ['Generated sentences will be longer than the training sentences on average', 'The generator can never emit a sentence containing an unseen bigram, limiting the diversity of its output', 'The generator will produce every possible bigram with equal probability', 'Sentences will never terminate because &lt;/s&gt; has zero count'], ans: 1,
+    exp: 'A zero count means zero probability, and a zero probability event is never sampled. Slide 39 lists two consequences of sparsity: unseen bigrams make test sentences score zero, and sampling based generation can never produce them. Smoothing addresses both.' },
+  { type: 'mc', src: 'L4 slides 47 to 48', tags: ['InfiniGram'],
+    stem: 'The InfiniGram approach computes P(the | The water is so transparent that) = 0.2552 from counts of 49 and 192 in a 2TB corpus. How does it decide which N to use for each word?',
+    opts: ['It always uses a fixed N chosen in advance, typically 5', 'It uses the longest available context that has a nonzero count in the corpus, which can differ from word to word', 'It averages the unigram, bigram and trigram estimates', 'It uses add-k smoothing with k tuned on a development set'], ans: 1,
+    exp: 'InfiniGram drops the fixed Markov order and backs off from the full context to the longest suffix with a positive count, looking counts up on demand in a suffix tree rather than storing n-gram tables. The slide 48 example chains contexts of length 0 up to 7 without any smoothing.' },
+]},
+
+{ id: 'g5', title: 'Evaluating language models', src: 'Lectures 4 and 5',
+  intro: 'The last part of lecture 4 (revisited at the start of lecture 5) defines cross entropy as the average per word log probability of a test set, and perplexity as 2 raised to that entropy. The WSJ table with 962 / 170 / 109 is the running example.',
+  qs: [
+  { type: 'mc', src: 'L4 slides 49 to 52', tags: ['evaluation'],
+    stem: 'Swapping language model A for language model B inside a speech recognizer and comparing the recognizer\'s word error rate is an example of:',
+    opts: ['Intrinsic evaluation', 'Extrinsic evaluation', 'Cross validation', 'Perplexity comparison'], ans: 1,
+    exp: 'Extrinsic evaluation measures the model by how much it helps the downstream application (the slide calls it A/B testing). It is the gold standard but expensive, so intrinsic measures like perplexity are used for rapid iteration. The lecture warns that history is "littered with perplexity improvements that did not lead to improvements in the end applications".' },
+  { type: 'num', src: 'L4 slides 57 to 60, L5 slide 5', tags: ['perplexity'],
+    stem: 'A bigram model has a cross entropy of 7.41 bits per word on the WSJ test set. What is its perplexity? (nearest whole number)',
+    ans: 170, tol: 2, unit: '',
+    exp: '2<sup>7.41</sup> ≈ 170. The full table is unigram 9.91 bits / 962, bigram 7.41 / 170, trigram 6.77 / 109. The slides define perplexity as 2 raised to the entropy, where entropy is the negative average log₂ probability per token; the textbook (§3.3) defines it directly as P(W)<sup>−1/N</sup>. They are the same number.' },
+  { type: 'num', src: 'L4 slide 59', tags: ['perplexity'],
+    stem: 'Moving from the bigram model (perplexity 170) to the trigram model (perplexity 109) is usually reported as a percent reduction in perplexity. What is that reduction? (nearest whole percent)',
+    ans: 36, tol: 1, unit: '%',
+    exp: '(170 − 109) / 170 = 0.359, about 36%. Unigram to bigram is (962 − 170) / 962 ≈ 82%. The lecture\'s slightly cynical note: the same improvement is only 0.64 bits of entropy, which sounds far less impressive to your boss.' },
+  { type: 'mc', src: 'L4 slide 58', tags: ['perplexity'],
+    stem: 'A word prediction model over a 30,000 word vocabulary has no information at all and guesses uniformly. Its perplexity on any text is:',
+    opts: ['1', '30,000', 'log₂(30,000) ≈ 14.9', '0'], ans: 1,
+    exp: 'Perplexity is the weighted average number of choices the model faces. Uniform over M options gives perplexity M. A model that is always certain has perplexity 1 (entropy 0, since log 1 = 0). 14.9 bits is the entropy of the uniform model, not its perplexity.' },
+  { type: 'mc', src: 'L4 slide 61', tags: ['evaluation'],
+    stem: 'Two language models are trained on the same corpus but use different tokenizers with different vocabulary sizes. Their perplexities on the same test file are 95 and 140. What does the lecture say about this comparison?',
+    opts: ['The model with perplexity 95 is clearly better', 'The comparison is not meaningful, because perplexity depends on the tokenization and vocabulary, so the two numbers are not on the same scale', 'Perplexity should be converted to entropy before comparing', 'The model with more tokens per sentence is always penalized, so 140 may be better'], ans: 1,
+    exp: 'Slide 61 lists vocabulary size, tokenization method and unknown word handling as practical issues that confound comparisons. The textbook says the same: perplexities are only comparable across models with identical vocabularies, and only if the model never saw the test set.' },
+]},
+
+{ id: 'g6', title: 'Logistic regression: scoring, logits, softmax', src: 'Lectures 5 and 6',
+  intro: 'Lecture 5 extracts a feature vector from a real hotel review, scores it with made up weights, and then spends its last third deriving the sigmoid from odds and log odds. The Federalist authorship example carries the softmax.',
+  qs: [
+  { type: 'mc', src: 'L5 slides 31 to 37', tags: ['features'],
+    stem: 'From the "GORGEOUS HOTEL!" review, the lecture extracts the vector [6, 2, 1, 2, 7, 4.49, 4.23]. What do the seven entries represent, in order?',
+    opts: ['positive words, negative words, exclamation points, all caps words, personal pronouns, log token count, log type count', 'sentences, paragraphs, exclamation points, capitalized words, pronouns, tokens, types', 'positive words, negative words, question marks, all caps words, nouns, log word count, log character count', 'tokens, types, positive words, negative words, pronouns, exclamation points, sentence count'], ans: 0,
+    exp: 'Six positive lexicon words, two negative (gross, cheap), one "!", two all caps words (GORGEOUS, HOTEL), seven personal pronouns, and the natural logs of the token and type counts. The lecture notes an ambiguity worth remembering: the pronoun count could be tokens or types, since "I" appears more than once. After extraction the text itself is irrelevant; only the vector matters.' },
+  { type: 'num', src: 'L6 slides 36 to 37', tags: ['scoring'],
+    stem: 'A binary classifier has weights w = [2.5, −5, −1.2, 0.5, 2.0, 0.7] and bias b = 0.1. For the input x = [3, 2, 1, 3, 0, 4.15], compute the score z = w·x + b. (two decimal places)',
+    ans: 0.805, tol: 0.02, unit: '',
+    exp: '7.5 − 10 − 1.2 + 1.5 + 0 + 2.905 = 0.705, plus the bias gives 0.805. Passing that through the sigmoid gives 1 / (1 + e<sup>−0.805</sup>) = 0.69, the "computed answer" the slide uses in the gradient example. On the hotel review in lecture 5 the same arithmetic gives z ≈ −0.81 and p ≈ 0.31, so that review is (wrongly) called negative, because the weights were made up.' },
+  { type: 'mc', src: 'L5 slides 25 to 26', tags: ['sigmoid'],
+    stem: 'For a binary logistic regression classifier, which of these is true of the sigmoid σ(z) = 1 / (1 + e<sup>−z</sup>)?',
+    opts: ['σ(0) = 0, so a zero score means the negative class', 'σ(0) = 0.5, and P(negative | x) = 1 − σ(z) with no extra parameters', 'σ(z) can be negative when z is negative', 'σ(z) is only defined for z between −1 and 1'], ans: 1,
+    exp: 'A score of zero means no evidence either way, so 0.5. The negative class needs no separate weights: its probability is one minus the positive class. σ ranges over (0, 1) for any real z, approaching 1 as z grows and 0 as z falls.' },
+  { type: 'num', src: 'L5 slides 51 to 54, L6 slide 16', tags: ['logit'],
+    stem: 'Lecture 6 opens with a clicker question: a binary classifier assigns probability 0.5 to an item. What is the logit?',
+    ans: 0, tol: 0.001, unit: '',
+    exp: 'Odds = 0.5 / 0.5 = 1, and ln(1) = 0. The slide\'s odds table is worth memorizing: 0.95 → odds 19 → logit 2.944; 0.8 → 4 → 1.386; 0.75 → 3 → 1.099; 0.5 → 1 → 0; and the mirror images 0.25 → 1/3 → −1.099, 0.2 → 1/4 → −1.386, 0.05 → 1/19 → −2.944. The practice quiz asked the 0.75 row.' },
+  { type: 'mc', src: 'L5 slides 53 to 55', tags: ['logit'],
+    stem: 'Why does lecture 5 take the log of the odds rather than working with odds directly?',
+    opts: ['Odds can be negative, and the log makes them positive', 'Odds range from 0 to infinity and are asymmetric (19 versus 0.0526 for complementary events); log odds range over the whole real line and are symmetric (2.944 versus −2.944), which matches what a weighted sum w·x can produce', 'The log makes the odds sum to 1 across classes', 'Logs are cheaper to compute than division'], ans: 1,
+    exp: 'The derivation runs probability → odds (0 to ∞) → log odds (−∞ to ∞). Since a linear score w·x + b can land anywhere on the real line, interpreting z as a log odds is what makes the sigmoid the right function to turn scores into probabilities: exponentiate both sides of z = ln(p / (1 − p)) and solve for p and you get the sigmoid. The exponential in the sigmoid and the softmax is not arbitrary; it undoes that log.' },
+  { type: 'num', src: 'L6 slide 51', tags: ['softmax'],
+    stem: 'A three way Federalist classifier produces scores z = [3, 1, 4] for the classes Jay, Madison, Hamilton. Compute the softmax probability for Hamilton. (two decimal places)',
+    given: 'e^3 ≈ 20.1   e^1 ≈ 2.72   e^4 ≈ 54.6',
+    ans: 0.706, tol: 0.01, unit: '',
+    exp: '54.6 / (20.1 + 2.72 + 54.6) = 54.6 / 77.4 ≈ 0.71. The full distribution is [0.258, 0.035, 0.706]. Softmax exponentiates each score, then divides by the sum so the class probabilities add to 1. Because of the exponential, a gap of 1 in the scores becomes a factor of e ≈ 2.7 in probability, which is why Madison at z = 1 ends up near zero.' },
+  { type: 'mc', src: 'L5 slides 41 to 43', tags: ['softmax'],
+    stem: 'In multinomial logistic regression with k classes and n features, the lecture represents the weights as a matrix. What are its dimensions, and what does multiplying it by the feature vector produce?',
+    opts: ['n × k; a single score', 'k × n; a vector of k scores, one per class, computed independently', 'n × n; a probability distribution over features', 'k × k; a confusion matrix'], ans: 1,
+    exp: 'Each class has its own row of n weights, so W is k × n. W times the n × 1 feature vector is k × 1: one raw score (logit) per class. Softmax then turns that vector into a distribution. The slide adds a warning about terminology: multiclass here means choosing exactly one of k classes, not assigning several labels to one text.' },
+]},
+
+{ id: 'g7', title: 'Learning: loss, gradients, updates', src: 'Lecture 6',
+  intro: 'Lecture 6 defines cross entropy loss as the negative log of the probability assigned to the correct answer, states the gradient as (computed − correct) × feature value, and then does one full gradient step by hand.',
+  qs: [
+  { type: 'num', src: 'L6 slides 22 to 26', tags: ['cross entropy loss'],
+    stem: 'A binary classifier outputs 0.69 for an example whose correct label is 1. What is the cross entropy loss for this example, using the natural log? (two decimal places)',
+    ans: 0.371, tol: 0.01, unit: '',
+    exp: '−ln(0.69) = 0.37. With label 1 the loss is −log ŷ; with label 0 it would be −log(1 − ŷ) = −ln(0.31) = 1.17. The slide\'s two line summary: probabilities go the wrong way for a loss (high is good), so take the negative log, which turns a probability in (0, 1] into a loss in [0, ∞) with low probability giving a large loss.' },
+  { type: 'num', src: 'L6 slides 51 to 52', tags: ['cross entropy loss'],
+    stem: 'The Federalist classifier output [0.258, 0.035, 0.706] for Jay, Madison, Hamilton, and the gold label was Hamilton ([0, 0, 1]). What is the cross entropy loss for this example, using the natural log? (two decimal places)',
+    ans: 0.348, tol: 0.01, unit: '',
+    exp: '−ln(0.706) = 0.35. In the multiclass case the loss only looks at the probability assigned to the correct class; the 0.258 and 0.035 do not enter the loss directly (they enter the gradient for their own weight rows). Slide 52 states the learning intuition: move the weights so the output gets closer to [0, 0, 1].' },
+  { type: 'mc', src: 'L6 slides 35 and 38', tags: ['gradient'],
+    stem: 'For the binary example on slide 37 the computed answer was 0.69, the correct answer 1, and the input x = [3, 2, 1, 3, 0, 4.15]. Which vector is the gradient of the cross entropy loss with respect to the weights?',
+    opts: ['[0.93, 0.62, 0.31, 0.93, 0, 1.29]', '[−0.93, −0.62, −0.31, −0.93, 0, −1.29]', '[−0.31, −0.31, −0.31, −0.31, −0.31, −0.31]', '[2.07, 1.38, 0.69, 2.07, 0, 2.86]'], ans: 1,
+    exp: 'The gradient is (ŷ − y) · x = (0.69 − 1) · x = −0.31 · x = [−0.93, −0.62, −0.31, −0.93, 0, −1.29]. The slide describes this as "credit/blame assignment": take the difference between the computed and correct answers, then scale it by each feature\'s value. The feature with value 0 gets no update because it played no role in the score.' },
+  { type: 'num', src: 'L6 slide 39', tags: ['weight update'],
+    stem: 'Continue that example. The current weights are [2.5, −5, −1.2, 0.5, 2.0, 0.7], the gradient is [−0.93, −0.62, −0.31, −0.93, 0, −1.29], and the learning rate is 1. What is the <strong>first</strong> weight after the update? (two decimal places)',
+    ans: 3.43, tol: 0.02, unit: '',
+    exp: 'Gradient descent moves against the gradient: w ← w − η · ∇. So 2.5 − 1 × (−0.93) = 3.43. The full updated vector on the slide is [3.43, −4.38, −0.89, 1.43, 2.0, 1.98]. Because the label was 1 and the model said 0.69, every weight on a nonzero feature increases, which pushes the score up toward the correct answer.',
+    flag: 'Slide 40 ("Do it again") shows new weights of [2.92, −4.72, −1.06, 0.92, 2.0, 1.281], which do not match the learning rate 1 update on slide 39 (they correspond to a step of about 0.45). Do not let that throw you; the method is what matters. With the slide 39 weights the new score is well above the 0.998 quoted on slide 40 in either case, so the direction of the change is the lesson.' },
+  { type: 'mc', src: 'L6 slides 49 to 52', tags: ['softmax gradient'],
+    stem: 'In the Federalist example the model output [0.258, 0.035, 0.706] for Jay, Madison, Hamilton, gold Hamilton, on a feature vector x = [2, 0, 1]. What is the gradient of the loss with respect to the <strong>Jay</strong> weight row?',
+    opts: ['[−1.484, 0, −0.742]', '[0.516, 0, 0.258]', '[0.258, 0.258, 0.258]', '[−0.588, 0, −0.294]'], ans: 1,
+    exp: 'For class c the gradient is (ŷ<sub>c</sub> − y<sub>c</sub>) · x. Jay is a wrong class, so y<sub>Jay</sub> = 0 and the factor is 0.258 − 0 = 0.258, giving [0.516, 0, 0.258]. Subtracting this during the update lowers Jay\'s score on inputs that look like this one. For Hamilton the factor would be 0.706 − 1 = −0.294, giving the fourth option, which raises Hamilton\'s score. The practice quiz asked this for the correct class; the exam could just as easily ask it for a wrong one.' },
+  { type: 'mc', src: 'L6 slides 41 to 42', tags: ['SGD'],
+    stem: 'Which description matches <strong>minibatch</strong> training as the lecture presents it?',
+    opts: ['Update the weights after every single training example', 'Process the entire training set, accumulate all gradients, then make one update per pass', 'Select N examples, accumulate their gradients, update once, and repeat, with N chosen to maximize parallelism', 'Update only the weights whose gradient is largest'], ans: 2,
+    exp: 'The first option is plain stochastic gradient descent, the second is batch training, the third is minibatch. The lecture also mentions adjusting the learning rate during training. The textbook covers the same in §4.6.2 and §4.6.4.' },
+]},
+
+{ id: 'g8', title: 'Evaluating classifiers', src: 'Lecture 6',
+  intro: 'The end of lecture 6 (textbook §4.9, which is in the assigned reading) covers the 2 × 2 contingency table, precision, recall, F1, and the difference between micro and macro averaging, with a worked two class example.',
+  qs: [
+  { type: 'num', src: 'L6 slides 54 and 59', tags: ['precision and recall'],
+    stem: 'A spam classifier produced this contingency table: 10 true positives, 10 false positives, 10 false negatives, 970 true negatives. What is its <strong>recall</strong>?',
+    given: '                 Truth: yes   Truth: no\nClassifier: yes      10          10\nClassifier: no       10         970',
+    ans: 0.5, tol: 0.01, unit: '',
+    exp: 'Recall = TP / (TP + FN) = 10 / 20 = 0.5: of the things that were really spam, half were caught. Precision is also 10 / (10 + 10) = 0.5: of the things flagged, half really were spam. Accuracy is 980 / 1000 = 98%, which looks wonderful and is exactly why the lecture notes say to ask students why accuracy should not be used: a classifier that says "no" to everything would score 98% too.' },
+  { type: 'num', src: 'L6 slide 57', tags: ['F measure'],
+    stem: 'A classifier has precision 0.9 and recall 0.5. What is its balanced F1 score? (two decimal places)',
+    ans: 0.643, tol: 0.01, unit: '',
+    exp: 'F1 = 2PR / (P + R) = 2 × 0.9 × 0.5 / 1.4 = 0.64. The harmonic mean sits closer to the lower of the two numbers (the arithmetic mean would be 0.7), which is the point: you cannot get a good F1 by being very reluctant to guess (high precision, low recall) or very promiscuous (the reverse). You have to do well on both.' },
+  { type: 'num', src: 'L6 slide 59', tags: ['micro vs macro'],
+    stem: 'Class 1 has precision 10 / 20 = 0.5 and class 2 has precision 90 / 100 = 0.9. What is the <strong>micro</strong> averaged precision? (two decimal places)',
+    given: 'Class 1: TP 10, FP 10, FN 10, TN 970\nClass 2: TP 90, FP 10, FN 10, TN 890',
+    ans: 0.833, tol: 0.01, unit: '',
+    exp: 'Micro averaging pools the counts first: TP = 100, FP = 20, so 100 / 120 = 0.83. Macro averaging averages the per class scores: (0.5 + 0.9) / 2 = 0.7. Micro is dominated by the common class (class 2 has nine times the true positives); macro treats every class equally, so it exposes poor performance on a rare class. Which one you want depends on whether rare classes matter to the application.' },
+]},
+];
+
+// ---------- rendering ----------
+const root = document.getElementById('quiz');
+const state = {}; // id -> {done, right}
+let counter = 0;
+
+function esc(s){ return s; } // content is authored, not user supplied
+
+GROUPS.forEach(g => {
+  const sec = document.createElement('section');
+  sec.className = 'group'; sec.id = g.id;
+  sec.innerHTML = `<p class="eyebrow">${g.src}</p><h2>${g.title}</h2><p class="intro">${g.intro}</p>`;
+  g.qs.forEach(q => {
+    counter += 1;
+    const id = 'q' + counter;
+    state[id] = { done: false, right: false, q };
+    const card = document.createElement('div');
+    card.className = 'q'; card.id = id;
+    let body = `<div class="meta"><span class="chip">Question ${counter}</span><span class="chip src">${q.src}</span>${q.tags.map(t => `<span class="chip">${t}</span>`).join('')}</div>`;
+    body += `<div class="stem"><p>${q.stem}</p></div>`;
+    if (q.given) body += `<div class="given">${q.given}</div>`;
+    if (q.type === 'mc') {
+      body += `<ul class="opts">` + q.opts.map((o, i) =>
+        `<li><label><input type="radio" name="${id}" id="${id}-o${i}" value="${i}"><span>${o}</span></label></li>`).join('') + `</ul>`;
+    } else {
+      body += `<div class="numrow"><input type="text" id="${id}-in" inputmode="decimal" placeholder="your answer" autocomplete="off"><span class="unit">${q.unit || ''}</span></div>`;
+    }
+    body += `<div class="actions"><button type="button" data-check="${id}">Check</button><button type="button" class="ghost" data-show="${id}">Show answer</button><span class="verdict" id="${id}-v"></span></div>`;
+    let ansText = q.type === 'mc' ? q.opts[q.ans] : (q.ans + (q.unit ? ' ' + q.unit : ''));
+    body += `<div class="explain" id="${id}-x" hidden><p class="ans">Answer: ${ansText}</p><p class="note">${q.exp}</p>${q.flag ? `<p class="flag"><strong>Heads up.</strong> ${q.flag}</p>` : ''}</div>`;
+    card.innerHTML = body;
+    sec.appendChild(card);
+  });
+  root.appendChild(sec);
+});
+document.getElementById('s-total').textContent = counter;
+
+function parseNum(s) {
+  s = (s || '').trim().replace(/,/g, '').replace(/%$/, '').replace(/^≈/, '');
+  if (s === '') return NaN;
+  const frac = s.match(/^(-?[\d.]+)\s*\/\s*([\d.]+)$/);
+  if (frac) return parseFloat(frac[1]) / parseFloat(frac[2]);
+  return parseFloat(s);
+}
+
+function check(id) {
+  const st = state[id], q = st.q;
+  const v = document.getElementById(id + '-v');
+  let ok;
+  if (q.type === 'mc') {
+    const sel = document.querySelector(`input[name="${id}"]:checked`);
+    if (!sel) { v.textContent = 'Pick an option first.'; v.className = 'verdict'; return; }
+    ok = parseInt(sel.value, 10) === q.ans;
+    document.querySelectorAll(`#${id} .opts label`).forEach((lab, i) => {
+      lab.classList.remove('hit', 'miss');
+      if (i === q.ans) lab.classList.add('hit');
+      else if (lab.querySelector('input').checked) lab.classList.add('miss');
+    });
+  } else {
+    const val = parseNum(document.getElementById(id + '-in').value);
+    if (isNaN(val)) { v.textContent = 'Enter a number first.'; v.className = 'verdict'; return; }
+    ok = Math.abs(val - q.ans) <= q.tol + 1e-9;
+  }
+  v.textContent = ok ? 'Correct' : 'Not quite';
+  v.className = 'verdict ' + (ok ? 'ok' : 'no');
+  if (!st.done) { st.done = true; st.right = ok; }
+  document.getElementById(id + '-x').hidden = false;
+  tally();
+}
+
+function show(id) {
+  const q = state[id].q;
+  document.getElementById(id + '-x').hidden = false;
+  if (q.type === 'mc') document.querySelectorAll(`#${id} .opts label`)[q.ans].classList.add('hit');
+}
+
+function tally() {
+  let d = 0, r = 0;
+  Object.values(state).forEach(s => { if (s.done) { d++; if (s.right) r++; } });
+  document.getElementById('s-done').textContent = d;
+  document.getElementById('s-right').textContent = r;
+}
+
+root.addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.check) check(b.dataset.check);
+  if (b.dataset.show) show(b.dataset.show);
+});
+document.getElementById('reveal-all').addEventListener('click', () => Object.keys(state).forEach(show));
+document.getElementById('reset-all').addEventListener('click', () => {
+  Object.keys(state).forEach(id => {
+    state[id].done = false; state[id].right = false;
+    document.getElementById(id + '-x').hidden = true;
+    const v = document.getElementById(id + '-v'); v.textContent = ''; v.className = 'verdict';
+    document.querySelectorAll(`#${id} .opts label`).forEach(l => l.classList.remove('hit', 'miss'));
+    document.querySelectorAll(`input[name="${id}"]`).forEach(r => r.checked = false);
+    const inp = document.getElementById(id + '-in'); if (inp) inp.value = '';
+  });
+  tally();
+});
+</script>
+</body>
+</html>
