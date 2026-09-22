@@ -8,7 +8,6 @@
 import re
 import subprocess
 import sys
-import tempfile
 from pathlib import Path
 
 import markdown
@@ -46,13 +45,20 @@ page = (f'<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
         f"<title>Assignment 2</title>\n<style>{CSS}</style>\n</head>\n"
         f"<body>\n{body}\n</body>\n</html>\n")
 
-# Edge needs a file to read, so the HTML goes to a temporary one that is deleted afterwards
-# rather than left sitting in report/ looking like something you are meant to edit.
-with tempfile.TemporaryDirectory() as tmp:
-    built = Path(tmp) / "assignment2.html"
+# Edge needs a file to read. It is written into the project, rendered, then removed, so it does
+# not linger next to the Markdown looking like something you are meant to edit.
+built = HERE / "_report_build.html"
+
+# Remove any previous PDF first. Edge does not reliably overwrite one, and the failure is
+# quiet: the page content comes out correct but the hyperlink annotations are dropped.
+PDF.unlink(missing_ok=True)
+
+try:
     built.write_text(page, encoding="utf-8")
     subprocess.run([str(EDGE), "--headless", "--disable-gpu", "--no-pdf-header-footer",
                     f"--print-to-pdf={PDF}", str(built)], capture_output=True, check=True)
+finally:
+    built.unlink(missing_ok=True)
 print(f"wrote {PDF.name} ({PDF.stat().st_size // 1024} KB)")
 
 try:
@@ -68,6 +74,7 @@ for i, page in enumerate(reader.pages):
 # The report style avoids hyphens and dashes in prose. Strip code names first, since those
 # legitimately contain them.
 full = "".join(p.extract_text() for p in reader.pages)
+full = re.sub(r"\S*(github\.com|github\.io|https?://)\S*", "", full)
 scrubbed = re.sub(r"(\w+\.py|models\.BPE|trainers\.BpeTrainer|train_tokenizer|neg_log_prob"
                   r"|cross_entropy|initial_alphabet|ByteLevel\.alphabet|split_sentences"
                   r"|uv run|src/|n.gram|pre.tokeniz\w*|add.k|add.1|out of vocabulary)",

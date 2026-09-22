@@ -2,6 +2,8 @@
 
 LING 5832, Assignment 2 · Yiyuan Jia · September 21, 2026
 
+Code: <https://github.com/yiyuan1840/ling-5832/tree/main/assignments/A2>
+
 
 ## 1. What I built
 
@@ -174,4 +176,4 @@ The assignment asks me to describe any pre existing or AI generated code. I work
 
 **How it went.** Claude acted as a tutor instead of just writing it for me. It explained each idea from scratch, told me what each function needed to do and why, and then checked what I wrote. It caught real mistakes in my code, including a function that silently returned `None` when given input it did not handle, and a place where I wrote `self.model` when I meant `self`. I caught mistakes in its explanations too. It told me the order of two pre tokenizers mattered, and when I tested it, it did not. It also had me write a loop I had already written somewhere else, which we deleted. Every number in this report was regenerated from the final version of the code rather than copied from an earlier run.
 
-*No pretrained tokenizer and no existing n gram library is used anywhere. The only outside package is `tokenizers` 0.23.2. Python 3.13.6. To reproduce: `uv run main.py` and `uv run src/experiments.py`.*
+*No pretrained tokenizer and no existing n gram library is used anywhere. The only outside package is `tokenizers` 0.23.2. Python 3.13.6. All of the code is at <https://github.com/yiyuan1840/ling-5832/tree/main/assignments/A2> and every number above can be reproduced with `uv run main.py` and `uv run src/experiments.py`.*
