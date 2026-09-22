@@ -1,0 +1,14 @@
+[project]
+name = "a2"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "markdown>=3.10.3",
+    "pathlib>=1.0.1",
+    "pypdf>=6.19.0",
+    "tiktoken>=0.14.0",
+    "tokenizer>=3.6.4",
+    "tokenizers>=0.23.2",
+]
