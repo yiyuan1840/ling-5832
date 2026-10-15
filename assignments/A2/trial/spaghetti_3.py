@@ -31,14 +31,27 @@ def split_sentences(text):
     return sentences
 
 
-all_sentences = split_sentences(hobbit)
+hobbit_sentences = split_sentences(hobbit)
 
-cut = int(len(all_sentences) * 0.9)
-train_sentences = all_sentences[:cut]
-test_sentences = all_sentences[cut:]
+cut = int(len(hobbit_sentences) * 0.9)
+tolkien_train_sentences = hobbit_sentences[:cut]
+tolkien_test_sentences = hobbit_sentences[cut:]
 
-print("train:", len(train_sentences))
-print("test: ", len(test_sentences))
+# print("train:", len(tolkien_train_sentences))
+# print("test: ", len(tolkien_test_sentences))
+
+lostworld_sentences = split_sentences(lostworld)
+
+cut = int(len(lostworld_sentences) * 0.9)
+doyle_train_sentences = lostworld_sentences[:cut]
+doyle_test_sentences = lostworld_sentences[cut:]
+
+# print("train:", len(doyle_train_sentences))
+# print("test: ", len(doyle_test_sentences))
+
+
+
+
 
 def average_surprise(model, sequences):
     total = 0.0
@@ -83,3 +96,13 @@ for sequence in test_sequences:
         total = total + 1
 
 print(unseen, "of", total, "contexts were never seen in training")
+
+
+# part 4: author identification
+V = tokenizer.get_vocab_size()
+
+tolkien_model = NgramModel(2, V, k=0.01)
+tolkien_model.fit([pad(encode(tokenizer, s), 2) for s in tolkien_train_sentences])
+
+doyle_model = NgramModel(2, V, k=0.01)
+doyle_model.fit([pad(encode(tokenizer, s), 2) for s in doyle_train_sentences])
