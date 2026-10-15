@@ -9,7 +9,9 @@ Code: <https://github.com/yiyuan1840/ling-5832/tree/main/assignments/A2>
 
 A BPE tokenizer using the Hugging Face `tokenizers` library, bigram and trigram models with add k smoothing, perplexity, and a classifier that guesses which of the two authors wrote a passage.
 
-The classifier got **255 out of 255** right on 50 word passages. That seemed too good, so I tested whether it was cheating, and it still got **97.6%** after I removed the two easiest clues. More on that in section 6.
+The classifier got **255 out of 255** right on 50 word passages of held out text. That seemed too good, so I tested whether it was cheating, and it still got **97.6%** after I removed the two easiest clues. More on that in section 6.
+
+On the 48 passages of the provided test set it produced 25 Tolkien and 23 Doyle. Half of those passages turn out to come from books I never trained on, and the model is about five times less confident on them. Section 7.
 
 Three things surprised me while doing this:
 
@@ -151,7 +153,50 @@ Two other things I noticed. Changing k barely moves the accuracy even though it 
 I also looked at the passages where the two scores were closest. The smallest gaps at 50 words were 0.043 and 0.047 nats, and one of those was a Tolkien *song*, which makes sense because verse does not sound like the prose the model was trained on. All the close ones were still right.
 
 
-## 7. Problems I ran into and things I noticed
+## 7. The provided test set
+
+The 48 passages in the instructor's test set were labelled with the settings above, using
+models trained on all of both books rather than 90% of each. The held out tenth existed to
+measure accuracy, and there is nothing left to measure when labelling real unseen data, so
+keeping it back would only have made the models worse at the job. Labels are in
+`results/predictions.tsv`, with both scores and the margin in `results/predictions.csv`.
+
+I do not know the true labels, so I cannot state an accuracy. But the output has a structure
+that is worth reporting.
+
+**Table 7.** Predictions and confidence, in blocks of twelve items.
+
+| items | Doyle | Tolkien | median margin |
+|---|---|---|---|
+| 1 to 12 | 12 | 0 | 2.50 |
+| 13 to 24 | 11 | 1 | 0.48 |
+| 25 to 36 | 0 | 12 | 2.45 |
+| 37 to 48 | 0 | 12 | 0.41 |
+
+Two things fall out of this.
+
+**The predictions line up almost perfectly with the item numbering.** Items 1 to 24 come out
+Doyle and 25 to 48 come out Tolkien, with one exception, ITEM-18. If the test set was built in
+blocks, which the numbering suggests, then the classifier disagreed with that structure exactly
+once in 48. ITEM-18 is a short indoor scene about wind, lamps and cigars, with none of the
+proper nouns either model relies on. I would not read a single disagreement as proof of
+anything, but it is the passage I would check first.
+
+**Half the passages are from books I never trained on, and the margins show it.** Reading them,
+items 13 to 24 are recognisably other Conan Doyle stories rather than The Lost World, including
+one set at the Blue John Gap and one about a missing train at Kenyon Junction. Items 37 to 48
+are recognisably The Lord of the Rings rather than The Hobbit, full of the Shire, Bag End and
+Bilbo's party. The median margin on those two blocks is 0.48 and 0.41, against 2.50 and 2.45 on
+the blocks drawn from the training books. The model is about five times less certain on the
+books it has not read.
+
+That is the prediction in section 8 item 6 coming true, and I am glad I wrote it down before
+seeing this data rather than after. The classifier still committed to an answer on every
+out of corpus passage, and the block structure suggests most of those answers are right, but
+its confidence collapsed, which is what you would expect if a large part of what it learned
+was the cast and the subject matter rather than the writing.
+
+## 8. Problems I ran into and things I noticed
 
 1. **The bottom of the add k fraction is easy to get wrong.** If you use how often the word appears instead of how often it was a context, everything still runs and the numbers still look reasonable. Adding up the probabilities and checking they come to exactly 1 is what catches it. I would write that check first next time.
 
@@ -163,10 +208,10 @@ I also looked at the passages where the two scores were closest. The smallest ga
 
 5. **Things I know are still wrong.** My test set is the tail of each book instead of a sample from all through it. My sentence splitter breaks on abbreviations. And the scanned Tolkien text has OCR damage in it, like `1/1 ine` where it should say *wine*, which the Doyle text does not have, so that is one more small clue the classifier could be using that I did not remove.
 
-6. **I do not think this would generalize.** Both models only ever saw one book. A lot of what they know is the subject matter and the characters. If I ran this on passages from other books by the same two authors I would expect it to do a lot worse than Table 6 suggests.
+6. **I did not think this would generalize, and section 7 says I was half right.** Both models only ever saw one book, so a lot of what they know is the subject matter and the characters. On the provided test set, half the passages come from other books by the same two authors. The model still answered, and the block structure suggests it mostly answered correctly, but its confidence fell by a factor of five. So it generalizes better than I expected while confirming the reason I was worried.
 
 
-## 8. Code, and how much of it is mine
+## 9. Code, and how much of it is mine
 
 The assignment asks me to describe any pre existing or AI generated code. I worked on this with Claude (Anthropic) the whole way through, so a vague acknowledgement would not be honest. Here is the actual split.
 
@@ -176,4 +221,4 @@ The assignment asks me to describe any pre existing or AI generated code. I work
 
 **How it went.** Claude acted as a tutor instead of just writing it for me. It explained each idea from scratch, told me what each function needed to do and why, and then checked what I wrote. It caught real mistakes in my code, including a function that silently returned `None` when given input it did not handle, and a place where I wrote `self.model` when I meant `self`. I caught mistakes in its explanations too. It told me the order of two pre tokenizers mattered, and when I tested it, it did not. It also had me write a loop I had already written somewhere else, which we deleted. Every number in this report was regenerated from the final version of the code rather than copied from an earlier run.
 
-*No pretrained tokenizer and no existing n gram library is used anywhere. The only outside package is `tokenizers` 0.23.2. Python 3.13.6. All of the code is at <https://github.com/yiyuan1840/ling-5832/tree/main/assignments/A2> and every number above can be reproduced with `uv run main.py` and `uv run src/experiments.py`.*
+*No pretrained tokenizer and no existing n gram library is used anywhere. The only outside package is `tokenizers` 0.23.2. Python 3.13.6. All of the code is at <https://github.com/yiyuan1840/ling-5832/tree/main/assignments/A2> and every number above can be reproduced with `uv run main.py` and `uv run src/experiments.py`. The test set labels come from `uv run src/predict.py data/tests/HW2-F26-testset.txt`.*

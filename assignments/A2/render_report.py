@@ -86,10 +86,13 @@ for i, page in enumerate(reader.pages):
 # The report style avoids hyphens and dashes in prose. Strip code names first, since those
 # legitimately contain them.
 full = "".join(p.extract_text() for p in reader.pages)
+# Collapse whitespace first: the extractor breaks long names across lines, which would
+# otherwise hide a filename or identifier from the patterns below.
+full = re.sub(r"\s+", " ", full)
 full = re.sub(r"\S*(github\.com|github\.io|https?://)\S*", "", full)
 scrubbed = re.sub(r"(\w+\.py|models\.BPE|trainers\.BpeTrainer|train_tokenizer|neg_log_prob"
                   r"|cross_entropy|initial_alphabet|ByteLevel\.alphabet|split_sentences"
                   r"|uv run|src/|n.gram|pre.tokeniz\w*|add.k|add.1|out of vocabulary"
-                  r"|a2.submitted)",
+                  r"|a2.submitted|ITEM.\d+|HW2.F26.\s?testset)",
                   "", full, flags=re.I)
 print(f"dashes left in prose: {len(re.findall(r'[-\u2010-\u2015]', scrubbed))}")
